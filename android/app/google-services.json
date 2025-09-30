@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "855995089769",
+    "project_id": "despensa-inteligente-c1f9d",
+    "storage_bucket": "despensa-inteligente-c1f9d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:855995089769:android:4e16cb687e58423abeb3f8",
+        "android_client_info": {
+          "package_name": "com.webiados.despensainteligente.despensa_inteligente"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmfIcQz9suOPxo7_6UlX0_K5UBzqNKU48"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
