@@ -1,0 +1,14 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Fase 0 baseline: todo negado por defecto.
+    // Las fases 1+ agregan reglas por colección.
+    // En el emulador las reglas se pueden sobrescribir
+    // temporalmente para desarrollo local.
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
