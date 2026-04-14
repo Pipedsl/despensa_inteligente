@@ -158,17 +158,17 @@ Cada fase termina en un estado **demo-able** (se puede lanzar `flutter run -d ch
 
 **Objetivo:** Dejar el repo compilable y con la infraestructura de trabajo lista.
 
-- [ ] 0.1 Crear `DashboardScreen` placeholder (pantalla vacía con el tema aplicado y botón signOut) para que `main.dart` compile.
-- [ ] 0.2 Implementar `LoginScreen` mínimo (email + password + botón "entrar como test").
-- [ ] 0.3 Crear `lib/app/router.dart` con `go_router` y rutas: `/login`, `/`, `/despensa`, `/recetas`, `/cuenta`. Guard que redirige a `/login` si no hay `User`.
-- [ ] 0.4 Mover el tema a `lib/app/theme.dart`.
-- [ ] 0.5 Crear estructura de carpetas `features/*` vacías (ver sección 1.3).
-- [ ] 0.6 `firebase init` para activar Hosting + Functions + Firestore (seleccionar TypeScript para Functions, no sobrescribir `firebase_options.dart`).
-- [ ] 0.7 Inicializar `functions/` como proyecto TS con ESLint + Prettier.
-- [ ] 0.8 Crear `firestore.rules` y `firestore.indexes.json` iniciales (reglas laxas en dev, strict en prod via branch).
-- [ ] 0.9 Agregar GitHub Actions: workflow que en PR corre `flutter analyze`, `flutter test`, `flutter build web`.
-- [ ] 0.10 Crear skills/MCPs mínimos del bloque transversal (sección 3) para que Claude pueda operar Firebase y Flutter sin intervención manual.
-- [ ] 0.11 Commit inicial: "feat(fundaciones): scaffold compilable, router y CI base".
+- [x] 0.1 Crear `DashboardScreen` placeholder (pantalla vacía con el tema aplicado y botón signOut) para que `main.dart` compile.
+- [x] 0.2 Implementar `LoginScreen` mínimo (email + password + botón "entrar como test").
+- [x] 0.3 Crear `lib/app/router.dart` con `go_router` y rutas: `/login`, `/`. Guard `calculateRedirect` puro con 6 tests.
+- [x] 0.4 Mover el tema a `lib/app/theme.dart`.
+- [x] 0.5 Crear estructura de carpetas `features/*` vacías (ver sección 1.3).
+- [x] 0.6 `firebase.json` expandido manualmente con Hosting + Functions + Firestore + emulators (evita `firebase init` interactivo).
+- [x] 0.7 Inicializar `functions/` como proyecto TS con ESLint.
+- [x] 0.8 Crear `firestore.rules` (deny-all) y `firestore.indexes.json` iniciales.
+- [x] 0.9 Agregar GitHub Actions: workflow que en PR corre `flutter analyze`, `flutter test`, `flutter build web` + functions build.
+- [x] 0.10 Crear skills locales `despensa-flutter-ops` y `despensa-firebase-ops` en `.claude/skills/`.
+- [x] 0.11 11 commits atómicos. `flutter analyze` verde, 9 tests pasando, `flutter build web --release` ✓.
 
 **Criterio de salida:** `flutter run -d chrome` abre `LoginScreen`, login de test funciona, redirige a `DashboardScreen` vacío, `flutter analyze` pasa, CI verde.
 
