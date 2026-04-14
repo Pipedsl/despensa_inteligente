@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:despensa_inteligente/services/auth.service.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -50,7 +51,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 children: [
                   const Text(
                     'DespensaInteligente',
-                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                    style:
+                        TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 32),
                   TextField(
@@ -69,35 +71,36 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   if (_error != null)
                     Padding(
                       padding: const EdgeInsets.only(bottom: 12),
-                      child: Text(
-                        _error!,
-                        style: const TextStyle(color: Colors.redAccent),
-                      ),
+                      child: Text(_error!,
+                          style:
+                              const TextStyle(color: Colors.redAccent)),
                     ),
                   FilledButton(
                     onPressed: _loading
                         ? null
-                        : () => _run(
-                              () => ref.read(authServiceProvider).signIn(
-                                  _emailCtrl.text, _passCtrl.text),
-                            ),
+                        : () => _run(() => ref
+                            .read(authServiceProvider)
+                            .signIn(_emailCtrl.text, _passCtrl.text)),
                     child: _loading
                         ? const SizedBox(
                             height: 20,
                             width: 20,
                             child:
-                                CircularProgressIndicator(strokeWidth: 2),
-                          )
+                                CircularProgressIndicator(strokeWidth: 2))
                         : const Text('Entrar'),
                   ),
                   const SizedBox(height: 8),
-                  TextButton(
+                  OutlinedButton.icon(
                     onPressed: _loading
                         ? null
-                        : () => _run(
-                              () => ref.read(authServiceProvider).signUp(
-                                  _emailCtrl.text, _passCtrl.text),
-                            ),
+                        : () => _run(() =>
+                            ref.read(authServiceProvider).signInWithGoogle()),
+                    icon: const Icon(Icons.login),
+                    label: const Text('Entrar con Google'),
+                  ),
+                  const SizedBox(height: 8),
+                  TextButton(
+                    onPressed: () => context.go('/registro'),
                     child: const Text('Crear cuenta'),
                   ),
                   const SizedBox(height: 8),
@@ -105,7 +108,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     onPressed: _loading
                         ? null
                         : () => _run(
-                              ref.read(authServiceProvider).signInAsTestUser),
+                            ref.read(authServiceProvider).signInAsTestUser),
                     child: const Text('Entrar como test'),
                   ),
                 ],
