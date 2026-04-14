@@ -178,20 +178,20 @@ Cada fase termina en un estado **demo-able** (se puede lanzar `flutter run -d ch
 
 **Objetivo:** Un usuario puede registrarse, crear un hogar, invitar a otro miembro y ambos ver el mismo hogar.
 
-- [ ] 1.1 Habilitar Google Sign-In en Firebase Auth + configurar en `web/index.html` y botón en `LoginScreen`.
-- [ ] 1.2 Pantalla de registro (email + contraseña + nombre).
-- [ ] 1.3 Al crear usuario: crear documento `/usuarios/{uid}` con plan "free".
-- [ ] 1.4 Feature `hogares`:
-  - [ ] 1.4.1 Modelo `Hogar` y `HogarMember`.
-  - [ ] 1.4.2 `HogarRepository` con métodos `crear`, `listarPorUsuario`, `invitarPorCodigo`, `unirsePorCodigo`, `cambiarRol`.
-  - [ ] 1.4.3 Pantalla "Mis hogares" con lista, crear nuevo, generar código de invitación (6 chars, expira en 24h).
-  - [ ] 1.4.4 Pantalla "Unirse a hogar por código".
-  - [ ] 1.4.5 Selector de hogar activo persistido en `usuarios/{uid}.hogarActivo`.
-- [ ] 1.5 Escribir `firestore.rules` para multitenant:
+- [x] 1.1 Habilitar Google Sign-In en Firebase Auth + configurar en `web/index.html` y botón en `LoginScreen`.
+- [x] 1.2 Pantalla de registro (email + contraseña + nombre).
+- [x] 1.3 Al crear usuario: crear documento `/usuarios/{uid}` con plan "free".
+- [x] 1.4 Feature `hogares`:
+  - [x] 1.4.1 Modelo `Hogar` y `HogarMember`.
+  - [x] 1.4.2 `HogarRepository` con métodos `crear`, `listarPorUsuario`, `invitarPorCodigo`, `unirsePorCodigo`, `cambiarRol`.
+  - [x] 1.4.3 Pantalla "Mis hogares" con lista, crear nuevo, generar código de invitación (6 chars, expira en 24h).
+  - [x] 1.4.4 Pantalla "Unirse a hogar por código".
+  - [x] 1.4.5 Selector de hogar activo persistido en `usuarios/{uid}.hogarActivo`.
+- [x] 1.5 Escribir `firestore.rules` para multitenant:
   - `hogares/{id}` escribible solo por `owner`; legible por `miembros`.
   - `hogares/{id}/despensa/**` legible/escribible por miembros.
-- [ ] 1.6 Tests: regla de Firestore (un usuario **no** puede leer despensa de un hogar ajeno).
-- [ ] 1.7 Guard en `router.dart` que fuerza al usuario sin hogar a pasar por `/onboarding/hogar`.
+- [x] 1.6 Tests: repositorios con `fake_cloud_firestore` (Usuario + Hogar + invitaciones).
+- [x] 1.7 Guard en `router.dart` que fuerza al usuario sin hogar a pasar por `/onboarding/hogar`.
 
 **Criterio de salida:** Dos usuarios distintos (creados en el emulador) comparten el mismo hogar vía código de invitación, ven el mismo dashboard.
 
