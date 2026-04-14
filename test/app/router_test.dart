@@ -3,38 +3,90 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('calculateRedirect', () {
-    test('redirige a /login cuando no hay sesión y va a /', () {
-      final result = calculateRedirect(isLoggedIn: false, location: '/');
-      expect(result, '/login');
+    // --- no logueado ---
+    test('no logueado, va a / → /login', () {
+      expect(
+        calculateRedirect(isLoggedIn: false, hasHogar: null, location: '/'),
+        '/login',
+      );
     });
 
-    test('redirige a /login cuando no hay sesión y va a ruta protegida', () {
-      final result =
-          calculateRedirect(isLoggedIn: false, location: '/despensa');
-      expect(result, '/login');
+    test('no logueado, va a /despensa → /login', () {
+      expect(
+        calculateRedirect(
+            isLoggedIn: false, hasHogar: null, location: '/despensa'),
+        '/login',
+      );
     });
 
-    test('redirige a / cuando hay sesión y el usuario va a /login', () {
-      final result = calculateRedirect(isLoggedIn: true, location: '/login');
-      expect(result, '/');
+    test('no logueado, ya en /login → null (no redirigir)', () {
+      expect(
+        calculateRedirect(
+            isLoggedIn: false, hasHogar: null, location: '/login'),
+        isNull,
+      );
     });
 
-    test('no redirige cuando hay sesión y el usuario va a /', () {
-      final result = calculateRedirect(isLoggedIn: true, location: '/');
-      expect(result, isNull);
+    // --- logueado, sin hogar ---
+    test('logueado, sin hogar, va a / → /onboarding/hogar', () {
+      expect(
+        calculateRedirect(isLoggedIn: true, hasHogar: false, location: '/'),
+        '/onboarding/hogar',
+      );
     });
 
-    test('no redirige cuando no hay sesión y el usuario ya va a /login', () {
-      final result =
-          calculateRedirect(isLoggedIn: false, location: '/login');
-      expect(result, isNull);
+    test('logueado, sin hogar, ya en /onboarding/hogar → null', () {
+      expect(
+        calculateRedirect(
+            isLoggedIn: true,
+            hasHogar: false,
+            location: '/onboarding/hogar'),
+        isNull,
+      );
+    });
+
+    // --- logueado, con hogar ---
+    test('logueado con hogar, en /login → /', () {
+      expect(
+        calculateRedirect(
+            isLoggedIn: true, hasHogar: true, location: '/login'),
+        '/',
+      );
+    });
+
+    test('logueado con hogar, en /onboarding/hogar → /', () {
+      expect(
+        calculateRedirect(
+            isLoggedIn: true,
+            hasHogar: true,
+            location: '/onboarding/hogar'),
+        '/',
+      );
+    });
+
+    test('logueado con hogar, en / → null (permitir)', () {
+      expect(
+        calculateRedirect(isLoggedIn: true, hasHogar: true, location: '/'),
+        isNull,
+      );
+    });
+
+    // --- logueado, hogar loading (null) ---
+    test('logueado, hasHogar null (cargando), va a / → null (no redirigir)',
+        () {
+      expect(
+        calculateRedirect(isLoggedIn: true, hasHogar: null, location: '/'),
+        isNull,
+      );
     });
   });
 
   group('buildRouter', () {
-    test('devuelve una instancia de GoRouter sin errores', () {
-      expect(() => buildRouter(isLoggedIn: () => false), returnsNormally);
-      expect(() => buildRouter(isLoggedIn: () => true), returnsNormally);
+    test('crea el router sin errores', () {
+      expect(
+        () => buildRouter(isLoggedIn: () => false, hasHogar: () => null),
+        returnsNormally,
+      );
     });
   });
 }
