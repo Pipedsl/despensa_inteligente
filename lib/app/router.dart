@@ -5,6 +5,10 @@ import 'package:despensa_inteligente/features/auth/presentation/register_screen.
 import 'package:despensa_inteligente/features/hogares/presentation/onboarding_hogar_screen.dart';
 import 'package:despensa_inteligente/features/hogares/presentation/mis_hogares_screen.dart';
 import 'package:despensa_inteligente/features/home/presentation/dashboard_screen.dart';
+import 'package:despensa_inteligente/features/despensa/domain/item_despensa.dart';
+import 'package:despensa_inteligente/features/despensa/presentation/despensa_screen.dart';
+import 'package:despensa_inteligente/features/despensa/presentation/agregar_item_screen.dart';
+import 'package:despensa_inteligente/features/despensa/presentation/detalle_item_screen.dart';
 
 typedef IsLoggedIn = bool Function();
 typedef HasHogar = bool? Function();
@@ -58,6 +62,15 @@ GoRouter buildRouter({
           builder: (_, __) => const OnboardingHogarScreen()),
       GoRoute(
           path: '/hogares', builder: (_, __) => const MisHogaresScreen()),
+      GoRoute(path: '/despensa', builder: (_, __) => const DespensaScreen()),
+      GoRoute(
+        path: '/despensa/agregar',
+        builder: (_, state) => AgregarItemScreen(item: state.extra as ItemDespensa?),
+      ),
+      GoRoute(
+        path: '/despensa/:id',
+        builder: (_, state) => DetalleItemScreen(itemId: state.pathParameters['id']!),
+      ),
     ],
   );
 }

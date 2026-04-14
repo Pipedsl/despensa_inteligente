@@ -40,6 +40,12 @@ class DashboardScreen extends ConsumerWidget {
                 style: const TextStyle(color: Colors.white54, fontSize: 14),
               ),
             const SizedBox(height: 24),
+            FilledButton.icon(
+              onPressed: () => context.push('/despensa'),
+              icon: const Icon(Icons.kitchen_outlined),
+              label: const Text('Mi Despensa'),
+            ),
+            const SizedBox(height: 8),
             FilledButton(
               onPressed: () => ref.read(authServiceProvider).signOut(),
               child: const Text('Cerrar sesión'),

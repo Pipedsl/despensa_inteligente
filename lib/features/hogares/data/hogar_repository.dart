@@ -97,6 +97,13 @@ class HogarRepository {
     });
   }
 
+  Stream<Hogar?> streamById(String hogarId) {
+    return _col.doc(hogarId).snapshots().map((snap) {
+      if (!snap.exists) return null;
+      return Hogar.fromFirestore(snap);
+    });
+  }
+
   String _generarCodigo() {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     final rng = Random.secure();
