@@ -49,11 +49,8 @@ class ItemDespensa {
 
   int? get diasParaVencer {
     if (fechaVencimiento == null) return null;
-    final hoy = DateTime(
-      DateTime.now().year,
-      DateTime.now().month,
-      DateTime.now().day,
-    );
+    final now = DateTime.now();
+    final hoy = DateTime(now.year, now.month, now.day);
     final vence = DateTime(
       fechaVencimiento!.year,
       fechaVencimiento!.month,
@@ -123,16 +120,18 @@ class ItemDespensa {
     'updatedAt': updatedAt.millisecondsSinceEpoch,
   };
 
+  static const Object _unset = Object();
+
   ItemDespensa copyWith({
     String? nombre,
     double? cantidad,
     String? unidad,
-    DateTime? fechaVencimiento,
-    DateTime? fechaCompra,
-    double? precio,
-    String? tienda,
-    double? cantidadComprada,
-    String? notas,
+    Object? fechaVencimiento = _unset,
+    Object? fechaCompra = _unset,
+    Object? precio = _unset,
+    Object? tienda = _unset,
+    Object? cantidadComprada = _unset,
+    Object? notas = _unset,
     String? estado,
   }) {
     return ItemDespensa(
@@ -140,14 +139,20 @@ class ItemDespensa {
       nombre: nombre ?? this.nombre,
       cantidad: cantidad ?? this.cantidad,
       unidad: unidad ?? this.unidad,
-      fechaVencimiento: fechaVencimiento ?? this.fechaVencimiento,
-      fechaCompra: fechaCompra ?? this.fechaCompra,
-      precio: precio ?? this.precio,
+      fechaVencimiento: fechaVencimiento == _unset
+          ? this.fechaVencimiento
+          : fechaVencimiento as DateTime?,
+      fechaCompra: fechaCompra == _unset
+          ? this.fechaCompra
+          : fechaCompra as DateTime?,
+      precio: precio == _unset ? this.precio : precio as double?,
       moneda: moneda,
-      tienda: tienda ?? this.tienda,
-      cantidadComprada: cantidadComprada ?? this.cantidadComprada,
+      tienda: tienda == _unset ? this.tienda : tienda as String?,
+      cantidadComprada: cantidadComprada == _unset
+          ? this.cantidadComprada
+          : cantidadComprada as double?,
       agregadoPor: agregadoPor,
-      notas: notas ?? this.notas,
+      notas: notas == _unset ? this.notas : notas as String?,
       estado: estado ?? this.estado,
       createdAt: createdAt,
       updatedAt: DateTime.now(),

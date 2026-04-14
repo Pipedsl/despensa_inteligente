@@ -17,6 +17,9 @@ ItemDespensa _makeItem({DateTime? fechaVencimiento}) {
 }
 
 void main() {
+  final now = DateTime.now();
+  final hoy = DateTime(now.year, now.month, now.day);
+
   group('ItemDespensa.diasParaVencer', () {
     test('returns null when no fechaVencimiento', () {
       final item = _makeItem();
@@ -71,6 +74,21 @@ void main() {
       final item = _makeItem(fechaVencimiento: DateTime(futuro.year, futuro.month, futuro.day));
       expect(item.estadoVencimiento, EstadoVencimiento.ok);
     });
+
+    test('urgente exactamente en 0 días (hoy)', () {
+      final item = _makeItem(fechaVencimiento: hoy);
+      expect(item.estadoVencimiento, EstadoVencimiento.urgente);
+    });
+
+    test('porVencer exactamente en 3 días', () {
+      final item = _makeItem(fechaVencimiento: hoy.add(const Duration(days: 3)));
+      expect(item.estadoVencimiento, EstadoVencimiento.porVencer);
+    });
+
+    test('ok exactamente en 7 días', () {
+      final item = _makeItem(fechaVencimiento: hoy.add(const Duration(days: 7)));
+      expect(item.estadoVencimiento, EstadoVencimiento.ok);
+    });
   });
 
   group('ItemDespensa.venceProximamente', () {
@@ -95,6 +113,27 @@ void main() {
     test('returns false when no fechaVencimiento', () {
       final item = _makeItem();
       expect(item.venceProximamente, isFalse);
+    });
+
+    test('false para 2 días (urgente pero no venceProximamente)', () {
+      final item = _makeItem(fechaVencimiento: hoy.add(const Duration(days: 2)));
+      expect(item.venceProximamente, isFalse);
+      expect(item.estadoVencimiento, EstadoVencimiento.urgente);
+    });
+  });
+
+  group('copyWith', () {
+    test('puede limpiar fechaVencimiento pasando null', () {
+      final item = _makeItem(fechaVencimiento: hoy.add(const Duration(days: 5)));
+      final cleared = item.copyWith(fechaVencimiento: null);
+      expect(cleared.fechaVencimiento, isNull);
+    });
+
+    test('mantiene valor original si no se pasa el campo', () {
+      final item = _makeItem(fechaVencimiento: hoy.add(const Duration(days: 5)));
+      final copy = item.copyWith(nombre: 'Nuevo nombre');
+      expect(copy.fechaVencimiento, equals(item.fechaVencimiento));
+      expect(copy.nombre, 'Nuevo nombre');
     });
   });
 }
