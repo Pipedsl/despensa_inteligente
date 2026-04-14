@@ -1,4 +1,5 @@
 // functions/src/types.ts
+import { Categoria } from "./core/taxonomy";
 
 export interface Nutricional {
   energiaKcal: number | null;
@@ -21,7 +22,7 @@ export interface ProductoGlobal {
   barcode: string;
   nombre: string;
   marca: string | null;
-  categorias: string[];
+  categorias: Categoria[];
   imagenUrl: string | null;
   nutricional: Nutricional | null;
   contribuidores: string[];
@@ -35,7 +36,7 @@ export interface ProductoGlobal {
 export interface NormalizerResponse {
   nombre: string;
   marca: string | null;
-  categorias: string[];
+  categorias: Categoria[];
   confianza: number;
   correcciones: string[];
 }
