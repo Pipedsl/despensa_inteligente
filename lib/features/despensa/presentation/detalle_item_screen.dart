@@ -91,6 +91,7 @@ class DetalleItemScreen extends ConsumerWidget {
         ],
       ),
     );
+    if (!context.mounted) return;
     if (ok != true) return;
     final hogarId = ref.read(usuarioStreamProvider).asData?.value?.hogarActivo;
     if (hogarId == null) return;
