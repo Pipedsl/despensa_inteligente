@@ -68,3 +68,6 @@ xcuserdata/
 .env
 .env.*
 
+# Documentos internos de planificación (no publicar)
+docs/plans/
+
