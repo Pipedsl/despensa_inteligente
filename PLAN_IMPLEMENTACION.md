@@ -201,18 +201,18 @@ Cada fase termina en un estado **demo-able** (se puede lanzar `flutter run -d ch
 
 **Objetivo:** El hogar puede gestionar productos con vencimiento, precio, cantidad, tienda. Ordenamiento por proximidad a vencer.
 
-- [ ] 2.1 Modelo `ItemDespensa` (sección 1.2).
-- [ ] 2.2 `DespensaRepository` sobre `/hogares/{hogarId}/despensa/*`.
-- [ ] 2.3 Pantalla `DespensaScreen`:
+- [x] 2.1 Modelo `ItemDespensa` (sección 1.2).
+- [x] 2.2 `DespensaRepository` sobre `/hogares/{hogarId}/despensa/*`.
+- [x] 2.3 Pantalla `DespensaScreen`:
   - Lista ordenada por `fechaVencimiento` ascendente.
   - Badges: rojo (<3 días), amarillo (<7 días), verde (resto).
   - Pull-to-refresh, contador de ítems **con indicador `X / maxProductos`**.
   - Filtro por texto.
-- [ ] 2.4 Pantalla `AgregarItemScreen` (formulario manual por ahora): nombre, cantidad, unidad, fecha vencimiento (date picker), **precio (opcional)**, **tienda (opcional)**, **cantidad comprada (opcional)**.
-- [ ] 2.5 Pantalla `DetalleItemScreen` con editar / eliminar.
-- [ ] 2.6 Notificación visual: banner si hay ítems venciendo en 48h.
-- [ ] 2.7 **Enforcement de `maxProductos` por plan**: contador atómico en `/hogares/{hogarId}` (`productosActivos`) mantenido con `FieldValue.increment` en create/delete. Si `productosActivos >= plan.maxProductos` → bloqueo con CTA al upgrade. Se decrementa también cuando un ítem se marca como consumido o vencido.
-- [ ] 2.8 Tests: widget test de ordenamiento, unit test de repo con `fake_cloud_firestore`, test del contador atómico bajo carrera.
+- [x] 2.4 Pantalla `AgregarItemScreen` (formulario manual por ahora): nombre, cantidad, unidad, fecha vencimiento (date picker), **precio (opcional)**, **tienda (opcional)**, **cantidad comprada (opcional)**.
+- [x] 2.5 Pantalla `DetalleItemScreen` con editar / eliminar.
+- [x] 2.6 Notificación visual: banner si hay ítems venciendo en 48h.
+- [x] 2.7 **Enforcement de `maxProductos` por plan**: contador atómico en `/hogares/{hogarId}` (`productosActivos`) mantenido con `FieldValue.increment` en create/delete. Si `productosActivos >= plan.maxProductos` → bloqueo con CTA al upgrade. Se decrementa también cuando un ítem se marca como consumido o vencido.
+- [x] 2.8 Tests: widget test de ordenamiento, unit test de repo con `fake_cloud_firestore`, test del contador atómico bajo carrera.
 
 **Criterio de salida:** Un usuario puede agregar 10 productos manualmente, verlos ordenados por vencimiento, editarlos y eliminarlos. Ambos miembros del hogar los ven en tiempo real.
 
