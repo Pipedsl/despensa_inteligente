@@ -9,3 +9,5 @@ export const healthcheck = onRequest((_request, response) => {
     timestamp: new Date().toISOString(),
   });
 });
+
+export { lookupProductoGlobal } from "./productos/lookupProductoGlobal";
