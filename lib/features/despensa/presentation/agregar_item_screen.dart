@@ -5,6 +5,12 @@ import 'package:despensa_inteligente/core/plan_config.dart';
 import 'package:despensa_inteligente/features/auth/data/usuario_providers.dart';
 import 'package:despensa_inteligente/features/despensa/data/despensa_repository.dart';
 import 'package:despensa_inteligente/features/despensa/domain/item_despensa.dart';
+import 'package:despensa_inteligente/features/despensa/presentation/confirmar_pendiente_sheet.dart';
+import 'package:despensa_inteligente/features/productos_globales/data/productos_globales_providers.dart';
+import 'package:despensa_inteligente/features/productos_globales/domain/producto_global.dart';
+import 'package:despensa_inteligente/features/scanner/presentation/barcode_input.dart';
+
+enum _ScanOutcome { found, notFound, pendingReview }
 
 class AgregarItemScreen extends ConsumerStatefulWidget {
   final ItemDespensa? item; // null = crear, non-null = editar
@@ -24,6 +30,9 @@ class _AgregarItemScreenState extends ConsumerState<AgregarItemScreen> {
   late String _unidad;
   DateTime? _fechaVencimiento;
   bool _guardando = false;
+  String? _scannedBarcode;
+  bool _loadingLookup = false;
+  _ScanOutcome? _scanOutcome;
 
   bool get _esEdicion => widget.item != null;
 
@@ -87,6 +96,21 @@ class _AgregarItemScreenState extends ConsumerState<AgregarItemScreen> {
         );
       }
       if (mounted) context.pop();
+      // Fire-and-forget: proponer producto a la DB global si fue nuevo
+      if (_scannedBarcode != null &&
+          (_scanOutcome == _ScanOutcome.notFound ||
+              _scanOutcome == _ScanOutcome.pendingReview)) {
+        ref
+            .read(productosGlobalesRepositoryProvider)
+            .proponer(
+              barcode: _scannedBarcode!,
+              nombre: _nombreCtrl.text.trim(),
+            )
+            .catchError((Object e) {
+          debugPrint('proponerProductoGlobal falló: $e');
+          return const LookupNotFound() as LookupResult;
+        });
+      }
     } on LimiteProductosException {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -100,6 +124,51 @@ class _AgregarItemScreenState extends ConsumerState<AgregarItemScreen> {
       }
     } finally {
       if (mounted) setState(() => _guardando = false);
+    }
+  }
+
+  Future<void> _abrirEscaner() async {
+    String? barcode;
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) => BarcodeInput(
+        initialTab: BarcodeInputTab.keyboard,
+        onBarcode: (bc) {
+          barcode = bc;
+          Navigator.pop(context);
+        },
+      ),
+    );
+    if (barcode == null || !mounted) return;
+    setState(() => _loadingLookup = true);
+    try {
+      final repo = ref.read(productosGlobalesRepositoryProvider);
+      final res = await repo.lookupByBarcode(barcode!);
+      if (!mounted) return;
+      switch (res) {
+        case LookupFound(:final producto):
+          _scannedBarcode = barcode;
+          _nombreCtrl.text = producto.nombre;
+          _scanOutcome = _ScanOutcome.found;
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Producto encontrado')),
+          );
+        case LookupNotFound():
+          _scannedBarcode = barcode;
+          _scanOutcome = _ScanOutcome.notFound;
+        case LookupPendingReview(:final sugerencia):
+          final confirmada = await showConfirmarPendienteSheet(
+            context,
+            sugerencia: sugerencia,
+          );
+          if (confirmada == null || !mounted) return;
+          _scannedBarcode = barcode;
+          _nombreCtrl.text = confirmada.nombre;
+          _scanOutcome = _ScanOutcome.pendingReview;
+      }
+    } finally {
+      if (mounted) setState(() => _loadingLookup = false);
     }
   }
 
@@ -123,6 +192,18 @@ class _AgregarItemScreenState extends ConsumerState<AgregarItemScreen> {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
+            OutlinedButton.icon(
+              onPressed: _loadingLookup ? null : _abrirEscaner,
+              icon: _loadingLookup
+                  ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Icon(Icons.qr_code_scanner),
+              label: const Text('Escanear código'),
+            ),
+            const SizedBox(height: 12),
             TextFormField(
               controller: _nombreCtrl,
               decoration: const InputDecoration(labelText: 'Nombre del producto'),
