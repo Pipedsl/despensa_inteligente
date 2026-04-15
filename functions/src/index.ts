@@ -11,3 +11,4 @@ export const healthcheck = onRequest((_request, response) => {
 });
 
 export { lookupProductoGlobal } from "./productos/lookupProductoGlobal";
+export { proponerProductoGlobal } from "./productos/proponerProductoGlobal";
