@@ -1,5 +1,5 @@
 // functions/src/__tests__/rules.test.ts
-import { describe, it, expect, beforeAll, afterAll } from "vitest";
+import { describe, it, beforeAll, afterAll } from "vitest";
 import {
   initializeTestEnvironment,
   RulesTestEnvironment,
