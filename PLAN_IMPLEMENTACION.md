@@ -222,22 +222,22 @@ Cada fase termina en un estado **demo-able** (se puede lanzar `flutter run -d ch
 
 **Objetivo:** Al escanear un código de barras la app rellena el producto automáticamente; nuevos aportes enriquecen una base global; un agente IA valida/corrige antes de persistir.
 
-- [ ] 3.1 Integrar `mobile_scanner` y verificar funcionamiento en Chrome (requiere HTTPS o localhost).
-- [ ] 3.2 Componente `BarcodeInput` con dos modos: cámara y teclado.
-- [ ] 3.3 Cloud Function `lookupProductoGlobal(barcode)`:
+- [x] 3.1 Integrar `mobile_scanner` y verificar funcionamiento en Chrome (requiere HTTPS o localhost).
+- [x] 3.2 Componente `BarcodeInput` con dos modos: cámara y teclado.
+- [x] 3.3 Cloud Function `lookupProductoGlobal(barcode)`:
   - 3.3.1 Busca en `/productos_globales/{barcode}`. Si existe → retorna.
   - 3.3.2 Si no existe → consulta OpenFoodFacts. Si encuentra → crea draft con `source: "openfoodfacts"` y dispara pipeline de normalización.
   - 3.3.3 Si tampoco existe → retorna `null` para que el usuario llene manualmente.
-- [ ] 3.4 Cloud Function `proponerProductoGlobal(draft)` (trigger cuando usuario agrega un ítem con barcode nuevo o datos incompletos):
+- [x] 3.4 Cloud Function `proponerProductoGlobal(draft)` (trigger cuando usuario agrega un ítem con barcode nuevo o datos incompletos):
   - 3.4.1 Guarda draft en `/productos_globales_drafts/{id}`.
   - 3.4.2 Invoca **agente IA normalizador** (GPT-4o-mini) con prompt:
     > Eres un normalizador de productos de supermercado chilenos. Recibirás un input con barcode, nombre, marca, categoría y opcionales nutricionales. Debes: corregir typos, capitalización, expandir abreviaciones ("lt"→"1 L"), validar que la categoría exista en la taxonomía `[...]`, y devolver JSON con `{nombre, marca, categoria, confianza: 0-1, correcciones: [...]}`.
   - 3.4.3 Si `confianza >= 0.8`: merge con `/productos_globales/{barcode}`, respetando campos ya llenos (solo rellena `camposFaltantes`). Agrega `uid` a `contribuidores`.
   - 3.4.4 Si `< 0.8`: deja en `pendiente_revision`; devuelve al cliente los datos sugeridos para que el usuario confirme antes de guardar.
-- [ ] 3.5 **Lógica de completado progresivo:** cuando un segundo usuario agrega el mismo barcode con datos nutricionales, el normalizador hace merge rellenando solo `camposFaltantes`. Nunca sobrescribe datos existentes excepto con mayoría (3+ aportes coincidentes).
-- [ ] 3.6 Actualizar `AgregarItemScreen` para: escanear → autocompletar formulario → usuario confirma → guarda en despensa y dispara `proponerProductoGlobal`.
-- [ ] 3.7 Índice Firestore: por `barcode` y por `camposFaltantes` para dashboards internos.
-- [ ] 3.8 Tests: Function con emulador + fixture de OpenFoodFacts, caso de merge progresivo.
+- [x] 3.5 **Lógica de completado progresivo:** cuando un segundo usuario agrega el mismo barcode con datos nutricionales, el normalizador hace merge rellenando solo `camposFaltantes`. Nunca sobrescribe datos existentes excepto con mayoría (3+ aportes coincidentes).
+- [x] 3.6 Actualizar `AgregarItemScreen` para: escanear → autocompletar formulario → usuario confirma → guarda en despensa y dispara `proponerProductoGlobal`.
+- [x] 3.7 Índice Firestore: por `barcode` y por `camposFaltantes` para dashboards internos.
+- [x] 3.8 Tests: Function con emulador + fixture de OpenFoodFacts, caso de merge progresivo.
 
 **Criterio de salida:** Un usuario escanea un producto nunca visto, el agente IA lo normaliza, queda en la DB global. Un segundo usuario escanea el mismo y la info se autocompleta.
 
