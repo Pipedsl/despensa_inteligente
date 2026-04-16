@@ -53,6 +53,10 @@ service cloud.firestore {
       allow write: if false; // solo Firebase Admin SDK (Functions)
     }
 
+    match /productos_globales_drafts/{draftId} {
+      allow read, write: if false;
+    }
+
     // planes_config: lectura autenticada, escritura solo admin
     match /planes_config/{planId} {
       allow read: if isAuth();

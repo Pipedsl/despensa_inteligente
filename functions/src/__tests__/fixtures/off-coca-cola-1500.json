@@ -1,0 +1,17 @@
+{
+  "status": 1,
+  "product": {
+    "code": "7802800006003",
+    "product_name": "Coca-Cola 1.5 L",
+    "brands": "Coca-Cola",
+    "categories_tags": ["en:beverages", "en:carbonated-drinks"],
+    "image_front_url": "https://images.openfoodfacts.org/x.jpg",
+    "nutriments": {
+      "energy-kcal_100g": 42,
+      "proteins_100g": 0,
+      "fat_100g": 0,
+      "carbohydrates_100g": 10.6,
+      "sodium_100g": 0.01
+    }
+  }
+}
