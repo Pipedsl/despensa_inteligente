@@ -94,3 +94,15 @@ export type RecetaResponse =
   | { status: "ok"; receta: RecetaContenido; recetaId: string; fromCache: boolean; recetasRestantes: number }
   | { status: "plan_limit_exceeded"; recetasUsadas: number; maxRecetasMes: number }
   | { status: "despensa_vacia" };
+
+// ──────────────────────────────── Fase 5 — Stripe ────────────────────────────────
+
+export interface CheckoutRequest {
+  priceId: string;
+  successUrl: string;
+  cancelUrl: string;
+}
+
+export interface CheckoutResponse {
+  url: string;
+}
