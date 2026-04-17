@@ -45,6 +45,12 @@ service cloud.firestore {
       match /despensa/{itemId} {
         allow read, write: if isMember(hogarId);
       }
+
+      // Recetas: miembros del hogar pueden leer; escritura solo desde Functions
+      match /recetas/{recetaId} {
+        allow read: if isMember(hogarId);
+        allow write: if false;
+      }
     }
 
     // Productos globales: lectura autenticada, escritura solo desde Functions (admin SDK)
