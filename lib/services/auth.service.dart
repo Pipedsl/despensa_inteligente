@@ -83,8 +83,11 @@ class AuthService {
     try {
       return await signIn(testEmail, testPassword);
     } catch (e) {
-      if (e.toString().contains('user-not-found') ||
-          e.toString().contains('INVALID_LOGIN_CREDENTIALS')) {
+      final msg = e.toString();
+      if (msg.contains('user-not-found') ||
+          msg.contains('INVALID_LOGIN_CREDENTIALS') ||
+          msg.contains('invalid-credential') ||
+          msg.contains('auth credential is incorrect')) {
         return await signUp(testEmail, testPassword,
             displayName: 'Usuario Test');
       }
