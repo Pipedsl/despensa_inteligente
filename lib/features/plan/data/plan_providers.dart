@@ -1,10 +1,15 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:despensa_inteligente/features/auth/data/usuario_providers.dart';
 import 'package:despensa_inteligente/features/plan/data/plan_repository.dart';
+import 'package:despensa_inteligente/features/plan/data/stripe_repository.dart';
 import 'package:despensa_inteligente/features/plan/domain/plan_config.dart';
 
 final planRepositoryProvider = Provider<PlanRepository>(
   (_) => PlanRepository(),
+);
+
+final stripeRepositoryProvider = Provider<StripeRepository>(
+  (_) => StripeRepository.firebase(),
 );
 
 final planConfigProvider = FutureProvider<PlanConfig>((ref) async {
