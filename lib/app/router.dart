@@ -9,6 +9,10 @@ import 'package:despensa_inteligente/features/despensa/domain/item_despensa.dart
 import 'package:despensa_inteligente/features/despensa/presentation/despensa_screen.dart';
 import 'package:despensa_inteligente/features/despensa/presentation/agregar_item_screen.dart';
 import 'package:despensa_inteligente/features/despensa/presentation/detalle_item_screen.dart';
+import 'package:despensa_inteligente/features/recetas/presentation/recetas_screen.dart';
+import 'package:despensa_inteligente/features/recetas/presentation/detalle_receta_screen.dart';
+import 'package:despensa_inteligente/features/recetas/presentation/upgrade_screen.dart';
+import 'package:despensa_inteligente/features/recetas/domain/receta.dart';
 
 typedef IsLoggedIn = bool Function();
 typedef HasHogar = bool? Function();
@@ -71,6 +75,16 @@ GoRouter buildRouter({
         path: '/despensa/:id',
         builder: (_, state) => DetalleItemScreen(itemId: state.pathParameters['id']!),
       ),
+      GoRoute(path: '/recetas', builder: (_, __) => const RecetasScreen()),
+      GoRoute(
+        path: '/recetas/:id',
+        builder: (_, state) {
+          final receta = state.extra as Receta?;
+          if (receta == null) return const RecetasScreen();
+          return DetalleRecetaScreen(receta: receta);
+        },
+      ),
+      GoRoute(path: '/upgrade', builder: (_, __) => const UpgradeScreen()),
     ],
   );
 }

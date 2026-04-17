@@ -46,6 +46,12 @@ class DashboardScreen extends ConsumerWidget {
               label: const Text('Mi Despensa'),
             ),
             const SizedBox(height: 8),
+            FilledButton.icon(
+              onPressed: () => context.push('/recetas'),
+              icon: const Icon(Icons.restaurant_menu),
+              label: const Text('Recetas'),
+            ),
+            const SizedBox(height: 8),
             FilledButton(
               onPressed: () => ref.read(authServiceProvider).signOut(),
               child: const Text('Cerrar sesión'),
