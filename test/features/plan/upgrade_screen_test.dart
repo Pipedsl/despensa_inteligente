@@ -3,57 +3,48 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:despensa_inteligente/features/recetas/presentation/upgrade_screen.dart';
 import 'package:despensa_inteligente/features/plan/data/plan_providers.dart';
-import 'package:despensa_inteligente/features/plan/data/stripe_repository.dart';
-import 'package:despensa_inteligente/features/plan/domain/plan_config.dart';
+import 'package:despensa_inteligente/features/plan/data/flow_repository.dart';
 
-class FakeCheckoutCallable implements CheckoutCallable {
-  final CheckoutResult result;
+class FakeFlowCallable implements FlowCallable {
+  final FlowResult result;
   int callCount = 0;
-  FakeCheckoutCallable(this.result);
+  FakeFlowCallable(this.result);
 
   @override
   Future<Map<String, dynamic>> call(Map<String, dynamic> data) async {
     callCount++;
-    if (result is CheckoutUrlOk) {
-      return {'url': (result as CheckoutUrlOk).url};
+    if (result is FlowUrlOk) {
+      final ok = result as FlowUrlOk;
+      return {'url': ok.url, 'token': ok.token};
     }
-    throw Exception((result as CheckoutError).message);
+    throw Exception((result as FlowError).message);
   }
 }
 
-class _SlowFakeCheckoutCallable implements CheckoutCallable {
-  final CheckoutResult result;
-  _SlowFakeCheckoutCallable(this.result);
+class _SlowFakeFlowCallable implements FlowCallable {
+  final FlowResult result;
+  _SlowFakeFlowCallable(this.result);
 
   @override
   Future<Map<String, dynamic>> call(Map<String, dynamic> data) async {
     await Future<void>.delayed(const Duration(milliseconds: 300));
-    if (result is CheckoutUrlOk) {
-      return {'url': (result as CheckoutUrlOk).url};
+    if (result is FlowUrlOk) {
+      final ok = result as FlowUrlOk;
+      return {'url': ok.url, 'token': ok.token};
     }
-    throw Exception((result as CheckoutError).message);
+    throw Exception((result as FlowError).message);
   }
 }
-
-const _proConfig = PlanConfig(
-  id: 'pro',
-  maxRecetasMes: 50,
-  modeloReceta: 'gemini-2.5-flash',
-  maxHogares: 3,
-  maxMiembrosHogar: -1,
-  maxProductos: 300,
-  historialLimite: -1,
-  stripePriceId: 'price_test_pro',
-);
 
 void main() {
   testWidgets('UpgradeScreen muestra título Plan Pro', (tester) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          planConfigProvider.overrideWith((_) async => _proConfig),
-          stripeRepositoryProvider.overrideWith((_) => StripeRepository(
-            checkoutFn: FakeCheckoutCallable(CheckoutUrlOk('https://stripe.com/pay/test')),
+          flowRepositoryProvider.overrideWith((_) => FlowRepository(
+            crearSuscripcionFn: FakeFlowCallable(
+              FlowUrlOk(url: 'https://flow.cl/register/test', token: 'tok'),
+            ),
           )),
         ],
         child: const MaterialApp(home: UpgradeScreen()),
@@ -67,9 +58,10 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          planConfigProvider.overrideWith((_) async => _proConfig),
-          stripeRepositoryProvider.overrideWith((_) => StripeRepository(
-            checkoutFn: FakeCheckoutCallable(CheckoutUrlOk('https://stripe.com/pay/test')),
+          flowRepositoryProvider.overrideWith((_) => FlowRepository(
+            crearSuscripcionFn: FakeFlowCallable(
+              FlowUrlOk(url: 'https://flow.cl/register/test', token: 'tok'),
+            ),
           )),
         ],
         child: const MaterialApp(home: UpgradeScreen()),
@@ -83,9 +75,10 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          planConfigProvider.overrideWith((_) async => _proConfig),
-          stripeRepositoryProvider.overrideWith((_) => StripeRepository(
-            checkoutFn: FakeCheckoutCallable(CheckoutUrlOk('https://stripe.com/pay/test')),
+          flowRepositoryProvider.overrideWith((_) => FlowRepository(
+            crearSuscripcionFn: FakeFlowCallable(
+              FlowUrlOk(url: 'https://flow.cl/register/test', token: 'tok'),
+            ),
           )),
         ],
         child: const MaterialApp(home: UpgradeScreen()),
@@ -95,13 +88,12 @@ void main() {
     expect(find.byKey(const Key('btn_upgrade_pro')), findsOneWidget);
   });
 
-  testWidgets('UpgradeScreen muestra error snackbar si checkout falla', (tester) async {
+  testWidgets('UpgradeScreen muestra error snackbar si Flow falla', (tester) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          planConfigProvider.overrideWith((_) async => _proConfig),
-          stripeRepositoryProvider.overrideWith((_) => StripeRepository(
-            checkoutFn: FakeCheckoutCallable(CheckoutError('Error de prueba')),
+          flowRepositoryProvider.overrideWith((_) => FlowRepository(
+            crearSuscripcionFn: FakeFlowCallable(FlowError('Error de prueba')),
           )),
         ],
         child: const MaterialApp(home: UpgradeScreen()),
@@ -120,9 +112,8 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          planConfigProvider.overrideWith((_) async => _proConfig),
-          stripeRepositoryProvider.overrideWith((_) => StripeRepository(
-            checkoutFn: _SlowFakeCheckoutCallable(CheckoutError('fail')),
+          flowRepositoryProvider.overrideWith((_) => FlowRepository(
+            crearSuscripcionFn: _SlowFakeFlowCallable(FlowError('fail')),
           )),
         ],
         child: const MaterialApp(home: UpgradeScreen()),

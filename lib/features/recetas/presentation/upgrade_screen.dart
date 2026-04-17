@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:despensa_inteligente/features/plan/data/flow_repository.dart';
 import 'package:despensa_inteligente/features/plan/data/plan_providers.dart';
-import 'package:despensa_inteligente/features/plan/data/stripe_repository.dart';
 
 class UpgradeScreen extends ConsumerStatefulWidget {
   const UpgradeScreen({super.key});
@@ -15,32 +15,23 @@ class UpgradeScreen extends ConsumerStatefulWidget {
 class _UpgradeScreenState extends ConsumerState<UpgradeScreen> {
   bool _loading = false;
 
-  static const String _successUrl =
-      'https://despensa-inteligente-c1f9d.web.app/upgrade-success';
-  static const String _cancelUrl =
-      'https://despensa-inteligente-c1f9d.web.app/upgrade';
-
-  Future<void> _iniciarCheckout(String priceId) async {
+  Future<void> _iniciarRegistroFlow() async {
     if (_loading) return;
     setState(() => _loading = true);
     try {
-      final stripeRepo = ref.read(stripeRepositoryProvider);
-      final result = await stripeRepo.crearCheckoutSession(
-        priceId: priceId,
-        successUrl: _successUrl,
-        cancelUrl: _cancelUrl,
-      );
+      final flowRepo = ref.read(flowRepositoryProvider);
+      final result = await flowRepo.crearSuscripcion();
       if (!mounted) return;
       switch (result) {
-        case CheckoutUrlOk(:final url):
+        case FlowUrlOk(:final url):
           final uri = Uri.parse(url);
           if (await canLaunchUrl(uri)) {
             await launchUrl(uri, mode: LaunchMode.externalApplication);
           } else {
-            _mostrarError('No se pudo abrir la página de pago');
+            _mostrarError('No se pudo abrir la página de registro');
           }
-        case CheckoutError(:final message):
-          _mostrarError('Error al iniciar el pago: $message');
+        case FlowError(:final message):
+          _mostrarError('Error al iniciar el registro: $message');
       }
     } catch (e) {
       if (mounted) _mostrarError('Error inesperado: $e');
@@ -57,9 +48,6 @@ class _UpgradeScreenState extends ConsumerState<UpgradeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final planAsync = ref.watch(planConfigProvider);
-    final proPriceId = planAsync.asData?.value.stripePriceId;
-
     return Scaffold(
       appBar: AppBar(title: const Text('Plan Pro')),
       body: SingleChildScrollView(
@@ -107,9 +95,7 @@ class _UpgradeScreenState extends ConsumerState<UpgradeScreen> {
             else
               FilledButton.icon(
                 key: const Key('btn_upgrade_pro'),
-                onPressed: proPriceId != null
-                    ? () => _iniciarCheckout(proPriceId)
-                    : null,
+                onPressed: _iniciarRegistroFlow,
                 icon: const Icon(Icons.star),
                 label: const Text('Actualizar a Pro'),
                 style: FilledButton.styleFrom(
@@ -124,7 +110,7 @@ class _UpgradeScreenState extends ConsumerState<UpgradeScreen> {
             ),
             const SizedBox(height: 24),
             Text(
-              'Al continuar serás redirigido a Stripe para completar el pago de forma segura.',
+              'Al continuar serás redirigido a Flow para registrar tu tarjeta y activar la suscripción.',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
