@@ -48,10 +48,12 @@ app.*.map.json
 android/local.properties 
 # Contiene la ruta del SDK de Android
 android/.gradle
-*.jks                 
+*.jks
 # Claves de firma de Android
 *.p8
 *.p12
+android/key.properties
+android/app/upload-keystore.jks
 
 #IOS/macOS
 ios/.build/

@@ -1,0 +1,7 @@
+# Copia este archivo a `android/key.properties` y completá con tus valores.
+# NUNCA commitees key.properties ni el .jks — están en .gitignore.
+
+storePassword=TU_PASSWORD_DE_KEYSTORE
+keyPassword=TU_PASSWORD_DE_KEY
+keyAlias=upload
+storeFile=upload-keystore.jks
