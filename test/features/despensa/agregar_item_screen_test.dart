@@ -61,4 +61,20 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Agregar ítem'), findsOneWidget);
   });
+
+  testWidgets('muestra bloque INFO NUTRICIONAL colapsado por default', (tester) async {
+    await tester.pumpWidget(buildScreen());
+    await tester.pumpAndSettle();
+    // Scroll until the ExpansionTile header is visible
+    await tester.scrollUntilVisible(
+      find.text('INFO NUTRICIONAL (OPCIONAL)'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.pumpAndSettle();
+    // The ExpansionTile header text should be visible
+    expect(find.text('INFO NUTRICIONAL (OPCIONAL)'), findsOneWidget);
+    // The nutritional fields should NOT be visible (tile is collapsed)
+    expect(find.text('Energía (kcal)'), findsNothing);
+  });
 }
