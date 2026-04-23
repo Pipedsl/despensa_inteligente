@@ -45,5 +45,7 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Despensa Inteligente usa la cámara para escanear códigos de barras de tus productos y agregarlos rápidamente a tu despensa.</string>
 </dict>
 </plist>
