@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:despensa_inteligente/app/widgets/form_section.dart';
 import 'package:despensa_inteligente/app/widgets/responsive_center.dart';
 import 'package:despensa_inteligente/features/auth/data/usuario_providers.dart';
 import 'package:despensa_inteligente/features/despensa/data/despensa_providers.dart';
 import 'package:despensa_inteligente/features/despensa/data/despensa_repository.dart';
 import 'package:despensa_inteligente/features/despensa/domain/item_despensa.dart';
+import 'package:despensa_inteligente/features/productos_globales/data/productos_globales_providers.dart';
+import 'package:despensa_inteligente/features/productos_globales/domain/producto_global.dart';
 
 class DetalleItemScreen extends ConsumerWidget {
   final String itemId;
@@ -27,6 +30,22 @@ class DetalleItemScreen extends ConsumerWidget {
       );
     }
 
+    // Watch producto lookup if barcode is available
+    AsyncValue<LookupResult>? lookupAsync;
+    if (item.barcode != null) {
+      lookupAsync = ref.watch(productoLookupProvider(item.barcode!));
+    }
+
+    // Extract product data if lookup succeeded
+    ProductoGlobal? producto;
+    if (lookupAsync != null) {
+      lookupAsync.whenData((result) {
+        if (result is LookupFound) {
+          producto = result.producto;
+        }
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(title: Text(item.nombre)),
       body: ResponsiveCenter(
@@ -43,6 +62,11 @@ class DetalleItemScreen extends ConsumerWidget {
               _Row('Vence',
                   '${item.fechaVencimiento!.day}/${item.fechaVencimiento!.month}/${item.fechaVencimiento!.year}'),
             if (item.notas != null) _Row('Notas', item.notas!),
+            // Producto info section
+            if (producto != null) ...[
+              const SizedBox(height: 16),
+              _ProductoSection(producto: producto!),
+            ],
             const Spacer(),
             Row(children: [
               Expanded(
@@ -100,6 +124,101 @@ class DetalleItemScreen extends ConsumerWidget {
     if (hogarId == null) return;
     await ref.read(despensaRepositoryProvider).eliminar(hogarId: hogarId, itemId: item.id);
     if (context.mounted) context.pop();
+  }
+}
+
+class _ProductoSection extends StatelessWidget {
+  final ProductoGlobal producto;
+  const _ProductoSection({required this.producto});
+
+  @override
+  Widget build(BuildContext context) {
+    final nut = producto.nutricional;
+    return FormSection(
+      titulo: 'PRODUCTO',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (producto.marca != null) _Row('Marca', producto.marca!),
+          if (producto.categorias.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 6,
+              runSpacing: 4,
+              children: producto.categorias
+                  .map((c) => Chip(
+                        label: Text(c, style: const TextStyle(fontSize: 11)),
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        visualDensity: VisualDensity.compact,
+                      ))
+                  .toList(),
+            ),
+          ],
+          if (nut != null) ...[
+            const SizedBox(height: 12),
+            const Text(
+              'TABLA NUTRICIONAL',
+              style: TextStyle(fontSize: 11, letterSpacing: 1.1),
+            ),
+            const SizedBox(height: 8),
+            _NutGrid(nut: nut),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _NutGrid extends StatelessWidget {
+  final Nutricional nut;
+  const _NutGrid({required this.nut});
+
+  @override
+  Widget build(BuildContext context) {
+    final fields = <(String, double?)>[
+      ('Energía (kcal)', nut.energiaKcal),
+      ('Proteínas (g)', nut.proteinasG),
+      ('Grasas totales (g)', nut.grasasG),
+      ('Grasas saturadas (g)', nut.grasasSaturadasG),
+      ('Carbohidratos (g)', nut.carbosG),
+      ('Azúcares (g)', nut.azucaresG),
+      ('Fibra (g)', nut.fibraG),
+      ('Sodio (mg)', nut.sodioMg),
+    ].where((f) => f.$2 != null).toList();
+
+    if (fields.isEmpty) return const SizedBox.shrink();
+
+    return LayoutBuilder(builder: (context, constraints) {
+      final twoCols = constraints.maxWidth >= 300;
+      return Wrap(
+        spacing: 12,
+        runSpacing: 8,
+        children: fields
+            .map((f) => SizedBox(
+                  width: twoCols
+                      ? (constraints.maxWidth - 12) / 2
+                      : constraints.maxWidth,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          f.$1,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ),
+                      Text(
+                        f.$2!.toStringAsFixed(1),
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                    ],
+                  ),
+                ))
+            .toList(),
+      );
+    });
   }
 }
 

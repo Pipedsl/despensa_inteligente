@@ -49,6 +49,7 @@ class DespensaRepository {
     String? tienda,
     double? cantidadComprada,
     String? notas,
+    String? barcode,
   }) async {
     final hogarSnap = await _hogarRef(hogarId).get();
     final productosActivos = hogarSnap.data()?['productosActivos'] as int? ?? 0;
@@ -71,6 +72,7 @@ class DespensaRepository {
       estado: 'activo',
       createdAt: now,
       updatedAt: now,
+      barcode: barcode,
     );
 
     final batch = _db.batch();

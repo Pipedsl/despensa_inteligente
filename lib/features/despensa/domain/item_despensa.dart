@@ -28,6 +28,7 @@ class ItemDespensa {
   final String estado; // "activo" | "consumido" | "vencido"
   final DateTime createdAt;
   final DateTime updatedAt;
+  final String? barcode;
 
   const ItemDespensa({
     required this.id,
@@ -45,6 +46,7 @@ class ItemDespensa {
     required this.estado,
     required this.createdAt,
     required this.updatedAt,
+    this.barcode,
   });
 
   int? get diasParaVencer {
@@ -98,6 +100,7 @@ class ItemDespensa {
       estado: data['estado'] as String? ?? 'activo',
       createdAt: parseDate(data['createdAt']) ?? DateTime.now(),
       updatedAt: parseDate(data['updatedAt']) ?? DateTime.now(),
+      barcode: data['barcode'] as String?,
     );
   }
 
@@ -118,6 +121,7 @@ class ItemDespensa {
     'estado': estado,
     'createdAt': createdAt.millisecondsSinceEpoch,
     'updatedAt': updatedAt.millisecondsSinceEpoch,
+    if (barcode != null) 'barcode': barcode,
   };
 
   static const Object _unset = Object();
@@ -133,6 +137,7 @@ class ItemDespensa {
     Object? cantidadComprada = _unset,
     Object? notas = _unset,
     String? estado,
+    Object? barcode = _unset,
   }) {
     return ItemDespensa(
       id: id,
@@ -156,6 +161,7 @@ class ItemDespensa {
       estado: estado ?? this.estado,
       createdAt: createdAt,
       updatedAt: DateTime.now(),
+      barcode: barcode == _unset ? this.barcode : barcode as String?,
     );
   }
 }
