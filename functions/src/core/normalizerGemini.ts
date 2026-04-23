@@ -9,12 +9,14 @@ export function createGeminiNormalizer(genAI: GoogleGenerativeAI): NormalizerIA 
   return {
     async normalize(draft: ProductoDraft): Promise<NormalizerResponse> {
       const model = genAI.getGenerativeModel({
-        model: "gemini-2.0-flash",
+        model: "gemini-2.5-flash",
         systemInstruction: SYSTEM_PROMPT,
         generationConfig: {
           responseMimeType: "application/json",
           temperature: 0,
-          maxOutputTokens: 500,
+          // Gemini 2.5 usa tokens internos de "thinking" antes del output.
+          // Subimos el techo para evitar JSON truncado.
+          maxOutputTokens: 2048,
         },
       });
 
