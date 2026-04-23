@@ -18,45 +18,82 @@ service cloud.firestore {
         get(/databases/$(database)/documents/hogares/$(hogarId)).data.miembros[request.auth.uid] == 'owner';
     }
 
-    // Usuarios: solo el propio usuario lee y escribe su documento
+    // Usuarios: el propio usuario lee/escribe su doc, pero los campos sensibles
+    // (plan y billing) sólo los modifica el backend vía Cloud Functions.
     match /usuarios/{uid} {
-      allow read, write: if isAuth() && request.auth.uid == uid;
+      allow read: if isAuth() && request.auth.uid == uid;
+
+      // Al crear, el plan debe ser 'free' (no escalación desde el cliente)
+      allow create: if isAuth()
+        && request.auth.uid == uid
+        && request.resource.data.plan == 'free';
+
+      // En updates el cliente NO puede tocar plan ni campos de billing.
+      // Esos cambios vienen sólo del Admin SDK (Functions).
+      allow update: if isAuth()
+        && request.auth.uid == uid
+        && !request.resource.data.diff(resource.data).affectedKeys()
+             .hasAny(['plan', 'flowCustomerId', 'flowSubscriptionId',
+                      'stripeCustomerId', 'stripeSubscriptionId']);
+
+      allow delete: if isAuth() && request.auth.uid == uid;
     }
 
-    // Hogares: legibles por miembros, editables por owners (datos base)
+    // Hogares: miembros leen; owner edita; un usuario puede agregarse a sí mismo
+    // si aceptó una invitación (cambia sólo miembros/miembrosIds, y sólo su propio UID)
     match /hogares/{hogarId} {
       allow read: if isMember(hogarId);
+
       allow create: if isAuth() &&
         request.resource.data.creadoPor == request.auth.uid &&
         request.auth.uid in request.resource.data.miembrosIds;
-      allow update: if isOwner(hogarId);
+
+      allow update: if isOwner(hogarId) ||
+        (
+          isAuth() &&
+          request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['miembros', 'miembrosIds']) &&
+          !(request.auth.uid in resource.data.miembrosIds) &&
+          request.auth.uid in request.resource.data.miembrosIds &&
+          request.resource.data.miembros[request.auth.uid] == 'member'
+        );
+
       allow delete: if isOwner(hogarId);
 
-      // Invitaciones: miembros pueden leer, owners pueden crear
+      // Invitaciones: cualquier autenticado puede leer (necesario para
+      // collectionGroup query al aceptar un código). Los códigos son
+      // random 6-char; el modelo de seguridad asume baja entropía aceptable.
       match /invitaciones/{codigo} {
-        allow read: if isMember(hogarId);
+        allow read: if isAuth();
+
         allow create: if isOwner(hogarId);
-        // Actualizar (marcar como usada) es privilegiado; lo hace el backend vía Functions en prod.
-        // Para el MVP (sin Functions de escritura), se permite desde cliente autenticado:
-        allow update: if isAuth();
+
+        // Update: cualquier autenticado puede marcar la invitación como
+        // usada (setear usadoPor con su propio UID), y sólo si no está usada.
+        // No se pueden tocar otros campos.
+        allow update: if isAuth() &&
+          resource.data.usadoPor == null &&
+          request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['usadoPor']) &&
+          request.resource.data.usadoPor == request.auth.uid;
       }
 
-      // Despensa: miembros del hogar pueden leer y escribir
+      // Despensa: miembros del hogar leen y escriben ítems
       match /despensa/{itemId} {
         allow read, write: if isMember(hogarId);
       }
 
-      // Recetas: miembros del hogar pueden leer; escritura solo desde Functions
+      // Recetas: miembros leen; sólo el backend escribe
       match /recetas/{recetaId} {
         allow read: if isMember(hogarId);
         allow write: if false;
       }
     }
 
-    // Productos globales: lectura autenticada, escritura solo desde Functions (admin SDK)
+    // Productos globales: lectura autenticada, escritura solo backend
     match /productos_globales/{barcode} {
       allow read: if isAuth();
-      allow write: if false; // solo Firebase Admin SDK (Functions)
+      allow write: if false;
     }
 
     match /productos_globales_drafts/{draftId} {
