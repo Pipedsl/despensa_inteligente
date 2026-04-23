@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:despensa_inteligente/app/widgets/responsive_center.dart';
 import 'package:despensa_inteligente/core/plan_config.dart';
 import 'package:despensa_inteligente/features/auth/data/usuario_providers.dart';
 import 'package:despensa_inteligente/features/despensa/data/despensa_providers.dart';
@@ -41,7 +42,9 @@ class _DespensaScreenState extends ConsumerState<DespensaScreen> {
           ),
         ],
       ),
-      body: Column(
+      body: ResponsiveCenter(
+        maxWidth: ResponsiveCenter.listWidth,
+        child: Column(
         children: [
           if (hayVencimientos)
             MaterialBanner(
@@ -78,6 +81,7 @@ class _DespensaScreenState extends ConsumerState<DespensaScreen> {
             ),
           ),
         ],
+      ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push('/despensa/agregar'),

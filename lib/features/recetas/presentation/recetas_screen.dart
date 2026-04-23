@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:despensa_inteligente/app/widgets/responsive_center.dart';
 import 'package:despensa_inteligente/features/recetas/data/recetas_providers.dart';
 import 'package:despensa_inteligente/features/recetas/data/recetas_repository.dart';
 import 'package:despensa_inteligente/features/recetas/domain/receta.dart';
@@ -57,7 +58,9 @@ class _RecetasScreenState extends ConsumerState<RecetasScreen> {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Recetas')),
-      body: Column(
+      body: ResponsiveCenter(
+        maxWidth: ResponsiveCenter.listWidth,
+        child: Column(
         children: [
           _CuotaBanner(plan: plan),
           Expanded(
@@ -74,6 +77,7 @@ class _RecetasScreenState extends ConsumerState<RecetasScreen> {
             ),
           ),
         ],
+      ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         key: const Key('btn_generar_receta'),

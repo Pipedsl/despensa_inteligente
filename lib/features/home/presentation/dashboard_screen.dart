@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:despensa_inteligente/app/widgets/responsive_center.dart';
 import 'package:despensa_inteligente/features/auth/data/usuario_providers.dart';
 import 'package:despensa_inteligente/services/auth.service.dart';
 
@@ -25,7 +26,9 @@ class DashboardScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: Center(
+      body: ResponsiveCenter(
+        maxWidth: ResponsiveCenter.listWidth,
+        child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -58,6 +61,7 @@ class DashboardScreen extends ConsumerWidget {
             ),
           ],
         ),
+      ),
       ),
     );
   }
