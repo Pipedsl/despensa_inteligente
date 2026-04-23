@@ -58,7 +58,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCmfIcQz9suOPxo7_6UlX0_K5UBzqNKU48',
-    appId: '1:855995089769:android:4e16cb687e58423abeb3f8',
+    appId: '1:855995089769:android:73309c7be2fd53e6beb3f8',
     messagingSenderId: '855995089769',
     projectId: 'despensa-inteligente-c1f9d',
     storageBucket: 'despensa-inteligente-c1f9d.firebasestorage.app',
@@ -66,10 +66,10 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAdEtt5Cdnc_XgbesyEgO7dYKX0bT784OE',
-    appId: '1:855995089769:ios:834b8b7f20d01b0cbeb3f8',
+    appId: '1:855995089769:ios:ac9fbb9dba829503beb3f8',
     messagingSenderId: '855995089769',
     projectId: 'despensa-inteligente-c1f9d',
     storageBucket: 'despensa-inteligente-c1f9d.firebasestorage.app',
-    iosBundleId: 'com.webiados.despensainteligente.despensaInteligente',
+    iosBundleId: 'com.webiados.despensaInteligente',
   );
 }

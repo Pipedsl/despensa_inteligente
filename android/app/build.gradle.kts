@@ -19,7 +19,7 @@ val keystoreProperties = Properties().apply {
 }
 
 android {
-    namespace = "com.webiados.despensainteligente.despensa_inteligente"
+    namespace = "com.webiados.despensa_inteligente"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -33,7 +33,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.webiados.despensainteligente.despensa_inteligente"
+        applicationId = "com.webiados.despensa_inteligente"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
