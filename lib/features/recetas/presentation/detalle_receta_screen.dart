@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:despensa_inteligente/app/widgets/responsive_center.dart';
 import 'package:despensa_inteligente/features/recetas/domain/receta.dart';
 
 class DetalleRecetaScreen extends StatelessWidget {
@@ -10,7 +11,9 @@ class DetalleRecetaScreen extends StatelessWidget {
     final contenido = receta.contenido;
     return Scaffold(
       appBar: AppBar(title: Text(contenido.titulo)),
-      body: ListView(
+      body: ResponsiveCenter(
+        maxWidth: ResponsiveCenter.wideWidth,
+        child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
           Wrap(
@@ -68,6 +71,7 @@ class DetalleRecetaScreen extends StatelessWidget {
             ),
           ),
         ],
+      ),
       ),
     );
   }

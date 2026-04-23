@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:despensa_inteligente/app/widgets/responsive_center.dart';
 import 'package:despensa_inteligente/features/plan/data/flow_repository.dart';
 import 'package:despensa_inteligente/features/plan/data/plan_providers.dart';
 
@@ -50,7 +51,8 @@ class _UpgradeScreenState extends ConsumerState<UpgradeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Plan Pro')),
-      body: SingleChildScrollView(
+      body: ResponsiveCenter(
+        child: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -118,6 +120,7 @@ class _UpgradeScreenState extends ConsumerState<UpgradeScreen> {
             ),
           ],
         ),
+      ),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:despensa_inteligente/app/widgets/responsive_center.dart';
 import 'package:despensa_inteligente/features/auth/data/usuario_providers.dart';
 import 'package:despensa_inteligente/features/despensa/data/despensa_providers.dart';
 import 'package:despensa_inteligente/features/despensa/data/despensa_repository.dart';
@@ -28,7 +29,8 @@ class DetalleItemScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(item.nombre)),
-      body: Padding(
+      body: ResponsiveCenter(
+        child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,6 +70,7 @@ class DetalleItemScreen extends ConsumerWidget {
             ),
           ],
         ),
+      ),
       ),
     );
   }

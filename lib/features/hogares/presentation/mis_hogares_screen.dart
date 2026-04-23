@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:despensa_inteligente/app/widgets/responsive_center.dart';
 import 'package:despensa_inteligente/features/hogares/data/hogar_repository.dart';
 import 'package:despensa_inteligente/features/hogares/domain/hogar.dart';
 import 'package:despensa_inteligente/features/auth/data/usuario_repository.dart';
@@ -106,7 +107,9 @@ class _MisHogaresScreenState extends ConsumerState<MisHogaresScreen> {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Mis hogares')),
-      body: Padding(
+      body: ResponsiveCenter(
+        maxWidth: ResponsiveCenter.listWidth,
+        child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
@@ -220,6 +223,7 @@ class _MisHogaresScreenState extends ConsumerState<MisHogaresScreen> {
             const SizedBox(height: 16),
           ],
         ),
+      ),
       ),
     );
   }

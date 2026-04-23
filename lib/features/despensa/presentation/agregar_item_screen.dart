@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:despensa_inteligente/app/widgets/responsive_center.dart';
 import 'package:despensa_inteligente/core/plan_config.dart';
 import 'package:despensa_inteligente/features/auth/data/usuario_providers.dart';
 import 'package:despensa_inteligente/features/despensa/data/despensa_repository.dart';
@@ -187,7 +188,8 @@ class _AgregarItemScreenState extends ConsumerState<AgregarItemScreen> {
     final nombreVacio = _nombreCtrl.text.trim().isEmpty;
     return Scaffold(
       appBar: AppBar(title: Text(_esEdicion ? 'Editar ítem' : 'Agregar ítem')),
-      body: Form(
+      body: ResponsiveCenter(
+        child: Form(
         key: _formKey,
         child: ListView(
           padding: const EdgeInsets.all(16),
@@ -272,6 +274,7 @@ class _AgregarItemScreenState extends ConsumerState<AgregarItemScreen> {
             ),
           ],
         ),
+      ),
       ),
     );
   }
