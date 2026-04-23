@@ -188,7 +188,6 @@ Apple pide declarar las suscripciones antes de enviar a review.
 
 ⚠️ **Importante**: iOS requiere usar StoreKit / In-App Purchase para suscripciones digitales. **Flow.cl no es válido como pasarela de pago dentro de la app iOS**. Para iOS hay que implementar IAP de Apple (comisión 15-30%) o forzar al usuario a suscribirse en la web/Android.
 
-**Decisión pendiente**: ¿cómo manejar el plan Pro en iOS?
-- Opción A: implementar IAP nativo iOS (más trabajo, Apple se lleva 15-30%)
-- Opción B: no ofrecer suscripción en iOS — solo en Android y en la web
-- Opción C: suscribirse gratis en iOS, y redirigir a web/Android para upgrade
+**Decisión tomada**: implementar IAP nativo iOS (Opción A) cuando toque publicar en App Store. Aceptamos la comisión de Apple.
+
+Ver `docs/store/README.md` para implicancias técnicas y pasos concretos.
