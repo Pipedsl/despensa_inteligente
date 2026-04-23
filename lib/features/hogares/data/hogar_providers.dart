@@ -9,3 +9,7 @@ final hogarActivoStreamProvider = StreamProvider.autoDispose<Hogar?>((ref) {
   if (hogarId == null) return Stream.value(null);
   return ref.watch(hogarRepositoryProvider).streamById(hogarId);
 });
+
+final hogarActivoIdProvider = Provider<String?>((ref) {
+  return ref.watch(usuarioStreamProvider).asData?.value?.hogarActivo;
+});

@@ -47,13 +47,13 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCR-eEFK6dUcEdqymO6f0Grjb6RlPMq5nk',
-    appId: '1:855995089769:web:27e6445ca124eefabeb3f8',
+    apiKey: 'AIzaSyCkwEVEmkOIZfBWHW2kODFY5pVUVCfLOds',
+    appId: '1:855995089769:web:071d6e5854bf075fbeb3f8',
     messagingSenderId: '855995089769',
     projectId: 'despensa-inteligente-c1f9d',
     authDomain: 'despensa-inteligente-c1f9d.firebaseapp.com',
     storageBucket: 'despensa-inteligente-c1f9d.firebasestorage.app',
-    measurementId: 'G-EZKECZP555',
+    measurementId: 'G-TH6KWCN1GG',
   );
 
   static const FirebaseOptions android = FirebaseOptions(

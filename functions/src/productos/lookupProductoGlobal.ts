@@ -2,7 +2,7 @@
 import { onCall, HttpsError } from "firebase-functions/v2/https";
 import { defineSecret } from "firebase-functions/params";
 import { Timestamp } from "firebase-admin/firestore";
-import OpenAI from "openai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { db } from "../lib/admin";
 import { logEvent } from "../lib/logger";
 import {
@@ -10,10 +10,8 @@ import {
   HttpGet,
   defaultHttpGet,
 } from "../core/openFoodFacts";
-import {
-  createOpenAINormalizer,
-  NormalizerIA,
-} from "../core/normalizerOpenAI";
+import { NormalizerIA } from "../core/normalizerOpenAI";
+import { createGeminiNormalizer } from "../core/normalizerGemini";
 import {
   mergeProductoGlobal,
   CONFIANZA_AUTO_MERGE,
@@ -24,7 +22,7 @@ import {
   LookupResult,
 } from "../types";
 
-const OPENAI_API_KEY = defineSecret("OPENAI_API_KEY");
+const GEMINI_API_KEY = defineSecret("GEMINI_API_KEY");
 
 export interface LookupDeps {
   db: FirebaseFirestore.Firestore;
@@ -109,13 +107,13 @@ export function buildLookupHandler(deps: LookupDeps): LookupHandler {
 }
 
 export const lookupProductoGlobal = onCall(
-  { secrets: [OPENAI_API_KEY], region: "us-central1" },
+  { secrets: [GEMINI_API_KEY], region: "us-central1" },
   async (request) => {
-    const openai = new OpenAI({ apiKey: OPENAI_API_KEY.value() });
+    const genAI = new GoogleGenerativeAI(GEMINI_API_KEY.value());
     const handler = buildLookupHandler({
       db,
       fetchFromOFF: (bc) => fetchOpenFoodFacts(bc, defaultHttpGet as HttpGet),
-      normalizer: createOpenAINormalizer(openai),
+      normalizer: createGeminiNormalizer(genAI),
       now: () => Timestamp.now(),
     });
     return handler(request.data, request.auth?.uid);

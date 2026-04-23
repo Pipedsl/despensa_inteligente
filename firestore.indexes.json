@@ -15,6 +15,14 @@
         { "fieldPath": "estado", "order": "ASCENDING" },
         { "fieldPath": "camposFaltantes", "arrayConfig": "CONTAINS" }
       ]
+    },
+    {
+      "collectionGroup": "recetas",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "hashIngredientes", "order": "ASCENDING" },
+        { "fieldPath": "fecha", "order": "DESCENDING" }
+      ]
     }
   ],
   "fieldOverrides": []

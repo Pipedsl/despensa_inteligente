@@ -22,7 +22,7 @@
           "configurations": {
             "android": "1:855995089769:android:4e16cb687e58423abeb3f8",
             "ios": "1:855995089769:ios:834b8b7f20d01b0cbeb3f8",
-            "web": "1:855995089769:web:27e6445ca124eefabeb3f8"
+            "web": "1:855995089769:web:071d6e5854bf075fbeb3f8"
           }
         }
       }
@@ -47,14 +47,10 @@
     }
   ],
   "hosting": {
-    "public": "build/web",
+    "public": "site",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
+    "cleanUrls": true,
+    "trailingSlash": false
   },
   "emulators": {
     "auth": { "port": 9099 },

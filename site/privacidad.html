@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Política de Privacidad — Despensa Inteligente</title>
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+      background: #0E0E0E;
+      color: #D0D0D0;
+      line-height: 1.7;
+    }
+    main { max-width: 760px; margin: 0 auto; padding: 48px 24px 96px; }
+    a.back {
+      display: inline-block;
+      color: #CDE600;
+      text-decoration: none;
+      margin-bottom: 32px;
+      font-size: 0.9rem;
+    }
+    a.back:hover { text-decoration: underline; }
+    h1 {
+      font-size: 2rem;
+      color: #FFFFFF;
+      margin-bottom: 8px;
+    }
+    p.meta {
+      color: #707070;
+      font-size: 0.875rem;
+      margin-bottom: 32px;
+    }
+    h2 {
+      color: #CDE600;
+      font-size: 1.25rem;
+      margin: 32px 0 12px;
+    }
+    p { margin-bottom: 16px; }
+    ul { margin-bottom: 16px; padding-left: 24px; }
+    li { margin-bottom: 8px; }
+    a { color: #CDE600; }
+    strong { color: #FFFFFF; }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="back" href="/">← Volver</a>
+    <h1>Política de Privacidad</h1>
+    <p class="meta">Última actualización: 22 de abril de 2026</p>
+
+    <p>
+      Esta Política de Privacidad describe cómo Despensa Inteligente (en adelante "la app",
+      "nosotros") recopila, usa y protege la información personal de quienes usan nuestra
+      aplicación móvil.
+    </p>
+
+    <h2>1. Responsable del tratamiento</h2>
+    <p>
+      <strong>Webiados</strong> — empresa constituida en Chile. Contacto:
+      <a href="mailto:felipenavarrete.ps3@gmail.com">felipenavarrete.ps3@gmail.com</a>.
+    </p>
+
+    <h2>2. Datos que recopilamos</h2>
+    <ul>
+      <li>
+        <strong>Cuenta:</strong> nombre y correo electrónico cuando creás una cuenta
+        (mediante Firebase Authentication de Google).
+      </li>
+      <li>
+        <strong>Datos de despensa:</strong> productos que agregás, cantidades, fechas de
+        vencimiento, hogares que creás y miembros que invitás.
+      </li>
+      <li>
+        <strong>Recetas generadas:</strong> las recetas creadas por IA en base a tu despensa
+        se guardan asociadas a tu cuenta.
+      </li>
+      <li>
+        <strong>Cámara:</strong> usamos la cámara del dispositivo <em>únicamente</em> para
+        leer códigos de barras. Las imágenes capturadas no se almacenan ni se envían a
+        ningún servidor.
+      </li>
+      <li>
+        <strong>Datos de pago:</strong> si contratás el plan Pro, los datos de tu tarjeta
+        son procesados directamente por nuestro proveedor de pagos
+        (<a href="https://www.flow.cl" target="_blank" rel="noopener">Flow.cl</a>).
+        Nosotros no almacenamos números de tarjeta ni códigos de seguridad.
+      </li>
+    </ul>
+
+    <h2>3. Cómo usamos tus datos</h2>
+    <ul>
+      <li>Para operar la app: guardar tu despensa, autenticarte, sincronizar entre tus dispositivos.</li>
+      <li>Para generar recetas: enviamos la lista de productos a Google Gemini (API de IA) para obtener sugerencias.</li>
+      <li>Para identificar productos: al escanear un código de barras, consultamos la base pública <a href="https://world.openfoodfacts.org" target="_blank" rel="noopener">Open Food Facts</a>.</li>
+      <li>Para procesar pagos cuando usás el plan Pro.</li>
+      <li>Para responder consultas que nos envíes por correo.</li>
+    </ul>
+
+    <h2>4. Terceros con los que compartimos datos</h2>
+    <ul>
+      <li><strong>Google Firebase</strong> (autenticación, base de datos, funciones, hosting): almacena tu cuenta y los datos de la app.</li>
+      <li><strong>Google Gemini</strong>: recibe la lista de productos de tu despensa para generar recetas. No recibe tus datos personales.</li>
+      <li><strong>Open Food Facts</strong>: recibe códigos de barras para identificar productos. No recibe datos personales.</li>
+      <li><strong>Flow.cl</strong>: procesa pagos del plan Pro. Recibe tu nombre, correo y datos de tarjeta.</li>
+    </ul>
+    <p>
+      No vendemos tus datos. No los compartimos con anunciantes ni con terceros no listados arriba.
+    </p>
+
+    <h2>5. Almacenamiento y seguridad</h2>
+    <p>
+      Los datos se almacenan en servidores de Google Cloud (Firebase). Aplicamos reglas de
+      seguridad a nivel de base de datos para que sólo vos y los miembros autorizados de tu
+      hogar accedan a tus datos.
+    </p>
+
+    <h2>6. Retención</h2>
+    <p>
+      Conservamos tus datos mientras tu cuenta esté activa. Si cerrás tu cuenta, eliminamos
+      todos los datos asociados dentro de los 30 días siguientes, excepto lo que la ley nos
+      obligue a conservar (registros de pagos, tributarios).
+    </p>
+
+    <h2>7. Tus derechos</h2>
+    <p>
+      De acuerdo con la Ley 19.628 sobre Protección de la Vida Privada (Chile) y regulaciones
+      equivalentes, tenés derecho a:
+    </p>
+    <ul>
+      <li>Acceder a los datos que tenemos sobre vos</li>
+      <li>Rectificar datos incorrectos</li>
+      <li>Solicitar la eliminación de tu cuenta y tus datos</li>
+      <li>Exportar tus datos en formato legible</li>
+      <li>Oponerte al tratamiento de tus datos</li>
+    </ul>
+    <p>
+      Para ejercer estos derechos escribinos a
+      <a href="mailto:felipenavarrete.ps3@gmail.com">felipenavarrete.ps3@gmail.com</a>.
+    </p>
+
+    <h2>8. Menores de edad</h2>
+    <p>
+      La app no está dirigida a menores de 13 años. Si detectamos una cuenta de un menor,
+      la eliminamos.
+    </p>
+
+    <h2>9. Cambios a esta política</h2>
+    <p>
+      Podemos actualizar esta Política. Te avisaremos dentro de la app cuando haya cambios
+      significativos. La fecha de "Última actualización" arriba refleja la versión vigente.
+    </p>
+
+    <h2>10. Contacto</h2>
+    <p>
+      Dudas o reclamos sobre privacidad:
+      <a href="mailto:felipenavarrete.ps3@gmail.com">felipenavarrete.ps3@gmail.com</a>.
+    </p>
+  </main>
+</body>
+</html>

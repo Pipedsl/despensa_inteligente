@@ -2,9 +2,8 @@ name: CI
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main]
   pull_request:
-    branches: [main, develop]
 
 jobs:
   flutter:
@@ -17,7 +16,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version: "3.24.x"
+          flutter-version: "3.35.x"
           cache: true
 
       - name: Pub get
@@ -53,3 +52,6 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Test
+        run: npm test
