@@ -5,6 +5,10 @@ class Nutricional {
   final double? grasasG;
   final double? carbosG;
   final double? sodioMg;
+  final double? fibraG;
+  final double? azucaresG;
+  final double? grasasSaturadasG;
+  final double? porcionG;
 
   const Nutricional({
     this.energiaKcal,
@@ -12,6 +16,10 @@ class Nutricional {
     this.grasasG,
     this.carbosG,
     this.sodioMg,
+    this.fibraG,
+    this.azucaresG,
+    this.grasasSaturadasG,
+    this.porcionG,
   });
 
   factory Nutricional.fromMap(Map<String, dynamic> m) => Nutricional(
@@ -20,7 +28,23 @@ class Nutricional {
         grasasG: (m['grasasG'] as num?)?.toDouble(),
         carbosG: (m['carbosG'] as num?)?.toDouble(),
         sodioMg: (m['sodioMg'] as num?)?.toDouble(),
+        fibraG: (m['fibraG'] as num?)?.toDouble(),
+        azucaresG: (m['azucaresG'] as num?)?.toDouble(),
+        grasasSaturadasG: (m['grasasSaturadasG'] as num?)?.toDouble(),
+        porcionG: (m['porcionG'] as num?)?.toDouble(),
       );
+
+  Map<String, dynamic> toMap() => {
+        if (energiaKcal != null) 'energiaKcal': energiaKcal,
+        if (proteinasG != null) 'proteinasG': proteinasG,
+        if (grasasG != null) 'grasasG': grasasG,
+        if (carbosG != null) 'carbosG': carbosG,
+        if (sodioMg != null) 'sodioMg': sodioMg,
+        if (fibraG != null) 'fibraG': fibraG,
+        if (azucaresG != null) 'azucaresG': azucaresG,
+        if (grasasSaturadasG != null) 'grasasSaturadasG': grasasSaturadasG,
+        if (porcionG != null) 'porcionG': porcionG,
+      };
 }
 
 class ProductoGlobal {

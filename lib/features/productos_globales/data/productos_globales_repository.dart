@@ -45,6 +45,7 @@ class ProductosGlobalesRepository {
     String? marca,
     List<String>? categorias,
     String? imagenUrl,
+    Nutricional? nutricional,
   }) async {
     final draft = <String, dynamic>{
       'barcode': barcode,
@@ -52,6 +53,8 @@ class ProductosGlobalesRepository {
       if (marca != null) 'marca': marca,
       if (categorias != null) 'categorias': categorias,
       if (imagenUrl != null) 'imagenUrl': imagenUrl,
+      if (nutricional != null && nutricional.toMap().isNotEmpty)
+        'nutricional': nutricional.toMap(),
     };
     final data = await proponerFn.call({'draft': draft});
     return LookupResult.fromMap(data);

@@ -153,4 +153,44 @@ describe("proponerProductoGlobal", () => {
     expect(stored.contribuidores).toEqual(["u1", "u2"]);
     expect(stored.camposFaltantes).not.toContain("imagenUrl");
   });
+
+  it("acepta y persiste campos nutricionales extendidos (fibra, azúcares, grasas saturadas, porción)", async () => {
+    const deps = makeDeps();
+    const handler = buildProponerHandler(deps);
+    await handler(
+      {
+        draft: {
+          barcode: "7802811111111",
+          nombre: "galletas integrales",
+          marca: "marca",
+          nutricional: {
+            energiaKcal: 450,
+            proteinasG: 8,
+            grasasG: 15,
+            carbosG: 65,
+            sodioMg: 200,
+            fibraG: 6,
+            azucaresG: 12,
+            grasasSaturadasG: 3,
+            porcionG: 30,
+          },
+        },
+      },
+      "u1",
+    );
+    const stored = (
+      deps.db as never as ReturnType<typeof makeFakeDb>
+    ).store.get("productos_globales/7802811111111") as {
+      nutricional: {
+        fibraG: number | null;
+        azucaresG: number | null;
+        grasasSaturadasG: number | null;
+        porcionG: number | null;
+      };
+    };
+    expect(stored.nutricional.fibraG).toBe(6);
+    expect(stored.nutricional.azucaresG).toBe(12);
+    expect(stored.nutricional.grasasSaturadasG).toBe(3);
+    expect(stored.nutricional.porcionG).toBe(30);
+  });
 });
