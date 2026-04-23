@@ -185,97 +185,252 @@ class _AgregarItemScreenState extends ConsumerState<AgregarItemScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     final nombreVacio = _nombreCtrl.text.trim().isEmpty;
+
     return Scaffold(
       appBar: AppBar(title: Text(_esEdicion ? 'Editar ítem' : 'Agregar ítem')),
-      body: ResponsiveCenter(
-        child: Form(
-        key: _formKey,
-        child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            OutlinedButton.icon(
-              onPressed: _loadingLookup ? null : _abrirEscaner,
-              icon: _loadingLookup
-                  ? const SizedBox(
-                      width: 16,
-                      height: 16,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : const Icon(Icons.qr_code_scanner),
-              label: const Text('Escanear código'),
-            ),
-            const SizedBox(height: 12),
-            TextFormField(
-              controller: _nombreCtrl,
-              decoration: const InputDecoration(labelText: 'Nombre del producto'),
-              onChanged: (_) => setState(() {}),
-              validator: (v) => (v == null || v.trim().isEmpty) ? 'Requerido' : null,
-            ),
-            const SizedBox(height: 12),
-            Row(children: [
-              Expanded(
-                child: TextFormField(
-                  controller: _cantidadCtrl,
-                  decoration: const InputDecoration(labelText: 'Cantidad'),
-                  keyboardType: TextInputType.number,
-                  validator: (v) {
-                    if (v == null || v.isEmpty) return 'Requerido';
-                    if (double.tryParse(v) == null) return 'Número inválido';
-                    return null;
-                  },
-                ),
-              ),
-              const SizedBox(width: 12),
-              DropdownButton<String>(
-                value: _unidad,
-                items: kUnidades.map((u) => DropdownMenuItem(value: u, child: Text(u))).toList(),
-                onChanged: (v) => setState(() => _unidad = v!),
-              ),
-            ]),
-            const SizedBox(height: 12),
-            ListTile(
-              contentPadding: EdgeInsets.zero,
-              title: Text(_fechaVencimiento == null
-                  ? 'Fecha de vencimiento (opcional)'
-                  : 'Vence: ${_fechaVencimiento!.day}/${_fechaVencimiento!.month}/${_fechaVencimiento!.year}'),
-              trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-                IconButton(icon: const Icon(Icons.calendar_today), onPressed: _seleccionarFecha),
-                if (_fechaVencimiento != null)
-                  IconButton(
-                    icon: const Icon(Icons.clear),
-                    onPressed: () => setState(() => _fechaVencimiento = null),
-                  ),
-              ]),
-            ),
-            const SizedBox(height: 12),
-            TextFormField(
-              controller: _precioCtrl,
-              decoration: const InputDecoration(labelText: 'Precio en CLP (opcional)'),
-              keyboardType: TextInputType.number,
-            ),
-            const SizedBox(height: 12),
-            TextFormField(
-              controller: _tiendaCtrl,
-              decoration: const InputDecoration(labelText: 'Tienda (opcional)'),
-            ),
-            const SizedBox(height: 12),
-            TextFormField(
-              controller: _notasCtrl,
-              decoration: const InputDecoration(labelText: 'Notas (opcional)'),
-              maxLines: 2,
-            ),
-            const SizedBox(height: 24),
-            FilledButton(
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+          child: SizedBox(
+            height: 52,
+            child: FilledButton(
               onPressed: (nombreVacio || _guardando) ? null : _guardar,
               child: _guardando
-                  ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
                   : const Text('Guardar'),
             ),
-          ],
+          ),
         ),
       ),
+      body: ResponsiveCenter(
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+            children: [
+              // ── IDENTIFICACIÓN ──────────────────────────────────────
+              _Section(
+                titulo: 'IDENTIFICACIÓN',
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    OutlinedButton.icon(
+                      onPressed: _loadingLookup ? null : _abrirEscaner,
+                      icon: _loadingLookup
+                          ? const SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : const Icon(Icons.qr_code_scanner),
+                      label: const Text('Escanear código'),
+                    ),
+                    const SizedBox(height: 12),
+                    TextFormField(
+                      controller: _nombreCtrl,
+                      decoration: const InputDecoration(labelText: 'Nombre del producto'),
+                      onChanged: (_) => setState(() {}),
+                      validator: (v) {
+                        if (v == null || v.trim().isEmpty) return 'Requerido';
+                        if (v.trim().length < 2) return 'Mínimo 2 caracteres';
+                        return null;
+                      },
+                    ),
+                    if (_scanOutcome == _ScanOutcome.found) ...[
+                      const SizedBox(height: 8),
+                      Wrap(
+                        children: [
+                          Chip(
+                            avatar: Icon(
+                              Icons.check_circle,
+                              size: 16,
+                              color: Colors.green.shade300,
+                            ),
+                            label: const Text('Encontrado en la base'),
+                            backgroundColor: Colors.green.shade900,
+                            labelStyle: TextStyle(
+                              color: Colors.green.shade200,
+                              fontSize: 12,
+                            ),
+                            side: BorderSide.none,
+                            padding: const EdgeInsets.symmetric(horizontal: 4),
+                          ),
+                        ],
+                      ),
+                    ] else if (_scanOutcome == _ScanOutcome.notFound) ...[
+                      const SizedBox(height: 8),
+                      Wrap(
+                        children: [
+                          Chip(
+                            avatar: Icon(
+                              Icons.add_circle_outline,
+                              size: 16,
+                              color: Colors.amber.shade300,
+                            ),
+                            label: const Text('Nuevo producto — se agregará a la base al guardar'),
+                            backgroundColor: Colors.amber.shade900,
+                            labelStyle: TextStyle(
+                              color: Colors.amber.shade200,
+                              fontSize: 12,
+                            ),
+                            side: BorderSide.none,
+                            padding: const EdgeInsets.symmetric(horizontal: 4),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // ── CANTIDAD ─────────────────────────────────────────────
+              _Section(
+                titulo: 'CANTIDAD',
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: _cantidadCtrl,
+                        decoration: const InputDecoration(labelText: 'Cantidad'),
+                        keyboardType: TextInputType.number,
+                        validator: (v) {
+                          if (v == null || v.isEmpty) return 'Requerido';
+                          if (double.tryParse(v) == null) return 'Número inválido';
+                          return null;
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    DropdownButton<String>(
+                      value: _unidad,
+                      items: kUnidades
+                          .map((u) => DropdownMenuItem(value: u, child: Text(u)))
+                          .toList(),
+                      onChanged: (v) => setState(() => _unidad = v!),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // ── VENCIMIENTO ──────────────────────────────────────────
+              _Section(
+                titulo: 'VENCIMIENTO',
+                child: ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: Icon(
+                    Icons.calendar_today,
+                    color: _fechaVencimiento != null
+                        ? const Color(0xffcde600)
+                        : colorScheme.onSurfaceVariant,
+                  ),
+                  title: Text(
+                    _fechaVencimiento == null
+                        ? 'Agregar fecha (opcional)'
+                        : 'Vence: ${_fechaVencimiento!.day}/${_fechaVencimiento!.month}/${_fechaVencimiento!.year}',
+                    style: TextStyle(
+                      color: _fechaVencimiento != null
+                          ? const Color(0xffcde600)
+                          : null,
+                    ),
+                  ),
+                  trailing: _fechaVencimiento != null
+                      ? IconButton(
+                          icon: const Icon(Icons.clear),
+                          onPressed: () => setState(() => _fechaVencimiento = null),
+                        )
+                      : null,
+                  onTap: _seleccionarFecha,
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // ── DETALLES OPCIONALES ──────────────────────────────────
+              Container(
+                decoration: BoxDecoration(
+                  color: colorScheme.surfaceContainerHigh,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: ExpansionTile(
+                  title: const Text(
+                    'DETALLES OPCIONALES',
+                    style: TextStyle(
+                      fontSize: 12,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+                  tilePadding: const EdgeInsets.symmetric(horizontal: 16),
+                  childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                  expandedCrossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    TextFormField(
+                      controller: _precioCtrl,
+                      decoration: const InputDecoration(labelText: 'Precio en CLP (opcional)'),
+                      keyboardType: TextInputType.number,
+                    ),
+                    const SizedBox(height: 12),
+                    TextFormField(
+                      controller: _tiendaCtrl,
+                      decoration: const InputDecoration(labelText: 'Tienda (opcional)'),
+                    ),
+                    const SizedBox(height: 12),
+                    TextFormField(
+                      controller: _notasCtrl,
+                      decoration: const InputDecoration(labelText: 'Notas (opcional)'),
+                      maxLines: 2,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8),
+            ],
+          ),
+        ),
       ),
+    );
+  }
+}
+
+/// Widget privado para bloques visuales agrupados del formulario.
+class _Section extends StatelessWidget {
+  final String titulo;
+  final Widget child;
+
+  const _Section({required this.titulo, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          titulo,
+          style: TextStyle(
+            fontSize: 12,
+            letterSpacing: 1.2,
+            color: colorScheme.onSurfaceVariant,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Container(
+          decoration: BoxDecoration(
+            color: colorScheme.surfaceContainerHigh,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          padding: const EdgeInsets.all(16),
+          child: child,
+        ),
+      ],
     );
   }
 }
