@@ -73,3 +73,6 @@ xcuserdata/
 # Documentos internos de planificación (no publicar)
 docs/plans/
 
+
+# Firebase hosting cache
+.firebase/

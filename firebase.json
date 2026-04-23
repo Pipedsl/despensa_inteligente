@@ -47,14 +47,10 @@
     }
   ],
   "hosting": {
-    "public": "build/web",
+    "public": "site",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
+    "cleanUrls": true,
+    "trailingSlash": false
   },
   "emulators": {
     "auth": { "port": 9099 },
