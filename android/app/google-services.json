@@ -7,12 +7,25 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:855995089769:android:4e16cb687e58423abeb3f8",
+        "mobilesdk_app_id": "1:855995089769:android:73309c7be2fd53e6beb3f8",
         "android_client_info": {
-          "package_name": "com.webiados.despensainteligente.despensa_inteligente"
+          "package_name": "com.webiados.despensa_inteligente"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "855995089769-o52d5lvkt8p3nmm6oagtr1c1cmr7ghfr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.webiados.despensa_inteligente",
+            "certificate_hash": "98d29ee290e47adcb25555279e4566cf81a6b528"
+          }
+        },
+        {
+          "client_id": "855995089769-c3rnvd8ik1riln8neckuh7p9g1pg8660.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCmfIcQz9suOPxo7_6UlX0_K5UBzqNKU48"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "855995089769-c3rnvd8ik1riln8neckuh7p9g1pg8660.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "855995089769-543tqdrfnm54f4tb4i13utjiv88supg2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.webiados.despensaInteligente"
+              }
+            }
+          ]
         }
       }
     }

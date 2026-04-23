@@ -1,4 +1,4 @@
-package com.webiados.despensainteligente.despensa_inteligente
+package com.webiados.despensa_inteligente
 
 import io.flutter.embedding.android.FlutterActivity
 
