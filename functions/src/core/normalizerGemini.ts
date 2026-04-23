@@ -14,7 +14,9 @@ export function createGeminiNormalizer(genAI: GoogleGenerativeAI): NormalizerIA 
         generationConfig: {
           responseMimeType: "application/json",
           temperature: 0,
-          maxOutputTokens: 500,
+          // Gemini 2.5 usa tokens internos de "thinking" antes del output.
+          // Subimos el techo para evitar JSON truncado.
+          maxOutputTokens: 2048,
         },
       });
 
