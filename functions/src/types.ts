@@ -7,6 +7,10 @@ export interface Nutricional {
   grasasG: number | null;
   carbosG: number | null;
   sodioMg: number | null;
+  fibraG?: number | null;
+  azucaresG?: number | null;
+  grasasSaturadasG?: number | null;
+  porcionG?: number | null;
 }
 
 export interface ProductoDraft {

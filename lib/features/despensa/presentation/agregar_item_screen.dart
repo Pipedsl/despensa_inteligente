@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:despensa_inteligente/app/widgets/form_section.dart';
 import 'package:despensa_inteligente/app/widgets/responsive_center.dart';
 import 'package:despensa_inteligente/core/plan_config.dart';
 import 'package:despensa_inteligente/features/auth/data/usuario_providers.dart';
@@ -9,6 +10,7 @@ import 'package:despensa_inteligente/features/despensa/domain/item_despensa.dart
 import 'package:despensa_inteligente/features/despensa/presentation/confirmar_pendiente_sheet.dart';
 import 'package:despensa_inteligente/features/productos_globales/data/productos_globales_providers.dart';
 import 'package:despensa_inteligente/features/productos_globales/domain/producto_global.dart';
+import 'package:despensa_inteligente/features/productos_globales/presentation/proponer_producto_screen.dart';
 import 'package:despensa_inteligente/features/scanner/presentation/barcode_input.dart';
 
 enum _ScanOutcome { found, notFound, pendingReview }
@@ -173,6 +175,19 @@ class _AgregarItemScreenState extends ConsumerState<AgregarItemScreen> {
     }
   }
 
+  Future<void> _aportarProductoComunidad() async {
+    final barcode = _scannedBarcode;
+    if (barcode == null) return;
+    final result = await context.push<ProponerProductoResult>(
+      '/proponer-producto?barcode=${Uri.encodeQueryComponent(barcode)}',
+    );
+    if (!mounted || result == null) return;
+    _nombreCtrl.text = result.nombre;
+    // La proposición ya fue enviada al backend desde la pantalla.
+    // Evitamos re-enviarla en el fire-and-forget de _guardar().
+    setState(() => _scanOutcome = _ScanOutcome.pendingReview);
+  }
+
   Future<void> _seleccionarFecha() async {
     final picked = await showDatePicker(
       context: context,
@@ -215,7 +230,7 @@ class _AgregarItemScreenState extends ConsumerState<AgregarItemScreen> {
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
             children: [
               // ── IDENTIFICACIÓN ──────────────────────────────────────
-              _Section(
+              FormSection(
                 titulo: 'IDENTIFICACIÓN',
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -273,7 +288,7 @@ class _AgregarItemScreenState extends ConsumerState<AgregarItemScreen> {
                               size: 16,
                               color: Colors.amber.shade300,
                             ),
-                            label: const Text('Nuevo producto — se agregará a la base al guardar'),
+                            label: const Text('Nuevo producto'),
                             backgroundColor: Colors.amber.shade900,
                             labelStyle: TextStyle(
                               color: Colors.amber.shade200,
@@ -284,6 +299,14 @@ class _AgregarItemScreenState extends ConsumerState<AgregarItemScreen> {
                           ),
                         ],
                       ),
+                      const SizedBox(height: 4),
+                      TextButton.icon(
+                        onPressed: _aportarProductoComunidad,
+                        icon: const Icon(Icons.favorite_outline, size: 18),
+                        label: const Text(
+                          'Aportar info nutricional a la comunidad ➜',
+                        ),
+                      ),
                     ],
                   ],
                 ),
@@ -291,7 +314,7 @@ class _AgregarItemScreenState extends ConsumerState<AgregarItemScreen> {
               const SizedBox(height: 20),
 
               // ── CANTIDAD ─────────────────────────────────────────────
-              _Section(
+              FormSection(
                 titulo: 'CANTIDAD',
                 child: Row(
                   children: [
@@ -322,7 +345,7 @@ class _AgregarItemScreenState extends ConsumerState<AgregarItemScreen> {
               const SizedBox(height: 20),
 
               // ── VENCIMIENTO ──────────────────────────────────────────
-              _Section(
+              FormSection(
                 titulo: 'VENCIMIENTO',
                 child: ListTile(
                   contentPadding: EdgeInsets.zero,
@@ -400,37 +423,3 @@ class _AgregarItemScreenState extends ConsumerState<AgregarItemScreen> {
   }
 }
 
-/// Widget privado para bloques visuales agrupados del formulario.
-class _Section extends StatelessWidget {
-  final String titulo;
-  final Widget child;
-
-  const _Section({required this.titulo, required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text(
-          titulo,
-          style: TextStyle(
-            fontSize: 12,
-            letterSpacing: 1.2,
-            color: colorScheme.onSurfaceVariant,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Container(
-          decoration: BoxDecoration(
-            color: colorScheme.surfaceContainerHigh,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          padding: const EdgeInsets.all(16),
-          child: child,
-        ),
-      ],
-    );
-  }
-}

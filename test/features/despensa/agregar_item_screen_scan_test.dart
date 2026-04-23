@@ -48,6 +48,7 @@ class FakeRepo extends ProductosGlobalesRepository {
     String? marca,
     List<String>? categorias,
     String? imagenUrl,
+    Nutricional? nutricional,
   }) async {
     return const LookupNotFound();
   }

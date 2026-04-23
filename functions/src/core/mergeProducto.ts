@@ -27,6 +27,10 @@ const NUTR_KEYS: (keyof Nutricional)[] = [
   "grasasG",
   "carbosG",
   "sodioMg",
+  "fibraG",
+  "azucaresG",
+  "grasasSaturadasG",
+  "porcionG",
 ];
 
 function calcCamposFaltantes(p: {
@@ -118,8 +122,9 @@ export function mergeProductoGlobal(
   } else if (existing.nutricional && incoming.nutricional) {
     nutricional = { ...existing.nutricional };
     for (const k of NUTR_KEYS) {
-      if (nutricional[k] === null && incoming.nutricional[k] !== null) {
-        nutricional[k] = incoming.nutricional[k];
+      const incomingValue = incoming.nutricional[k];
+      if ((nutricional[k] ?? null) === null && incomingValue != null) {
+        nutricional[k] = incomingValue;
       }
     }
   } else {

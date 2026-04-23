@@ -12,6 +12,7 @@ import 'package:despensa_inteligente/features/despensa/presentation/detalle_item
 import 'package:despensa_inteligente/features/recetas/presentation/recetas_screen.dart';
 import 'package:despensa_inteligente/features/recetas/presentation/detalle_receta_screen.dart';
 import 'package:despensa_inteligente/features/recetas/presentation/upgrade_screen.dart';
+import 'package:despensa_inteligente/features/productos_globales/presentation/proponer_producto_screen.dart';
 import 'package:despensa_inteligente/features/recetas/domain/receta.dart';
 
 typedef IsLoggedIn = bool Function();
@@ -85,6 +86,13 @@ GoRouter buildRouter({
         },
       ),
       GoRoute(path: '/upgrade', builder: (_, __) => const UpgradeScreen()),
+      GoRoute(
+        path: '/proponer-producto',
+        builder: (_, state) {
+          final barcode = state.uri.queryParameters['barcode'] ?? '';
+          return ProponerProductoScreen(barcode: barcode);
+        },
+      ),
     ],
   );
 }

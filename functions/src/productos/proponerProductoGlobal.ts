@@ -26,6 +26,10 @@ const DraftSchema = z.object({
       grasasG: z.number().nullable(),
       carbosG: z.number().nullable(),
       sodioMg: z.number().nullable(),
+      fibraG: z.number().nullable().optional(),
+      azucaresG: z.number().nullable().optional(),
+      grasasSaturadasG: z.number().nullable().optional(),
+      porcionG: z.number().nullable().optional(),
     })
     .nullable()
     .optional(),
